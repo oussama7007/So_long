@@ -1,12 +1,30 @@
 Name = so_long
-libs = -Lmlx -lmlx -Llibft -lft -framework OpenGL -framework AppKit
 
-srs = main.c \
-	  libft/get_next_line.c \
+libs =  -Llibft -lft -Lminilibx -lmlx -framework OpenGL -framework AppKit
+INCLUDES = -I includes
+
+cc = cc
+cflags = -Wall -Werror -Wextra 
+
+srs = main.c  parse.c  libft/get_next_line.c \
 	  libft/get_next_line_utils.c
 
-objcts = $(src : .c = .o)
+objcts = $(srs:.c=.o)
 
-all : $(NAME)
+all : $(Name)
 
-$(NAME) : 
+$(Name) : $(objcts)
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJ) $(LIBS) -o $(NAME)
+
+%.o: %.c  includes/so_long.h includes/get_next_line.h	
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+clean :
+	rm -rf $(objcts)
+
+fclean :clean
+	rm -rf $(Name)
+
+re :fclean all
+
+.PHONY : clean
