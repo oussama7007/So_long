@@ -6,6 +6,22 @@
 #include <stdlib.h>
 #include "get_next_line.h"
 
+typedef struct s_point{
+    int x;
+    int y;
+}   t_point;
+
+typedef struct s_map{
+    char **grid;
+    int height;
+    int width;
+    t_point player;
+    t_point exit;
+    int     p_count;
+    int     e_count;
+    int     c_count;      
+}   t_map;
+
 int   check_extention(char *str);
 int   main(int ac , char **av);
 int validate_map(char *str);
