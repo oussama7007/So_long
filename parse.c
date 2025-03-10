@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/09 23:39:18 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/10 03:54:04 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,26 @@ int     load_map(int fd, t_map *map)
     }
     return (1);
 }
+int     is_map_closed(t_map *map)
+{
+        int y;
+        int x;
+
+        y = -1;
+        x = -1;
+        while(++y < map->height)
+        {
+            if(map->grid[y][0] != '1' || map->grid[y][map->width - 1] != '1')
+                return 0;
+        }
+        while(++x < map->width)
+        {
+            if(map->grid[0][x] != '1' || map->grid[map->height - 1] != '1')
+                return 0;
+        }
+        return 1;
+}
+int 
 int validate_map(char *filename)
 {
     int fd;
@@ -170,8 +190,8 @@ int validate_map(char *filename)
     close(fd);
     fd = open(filename, O_RDONLY);
     if(fd < 0 || !load_map(fd, &map))
-        return(clean_exit(&map, 0, fd, "Error: the map has invalid element\n"), 0);
+        return(clean_exit(&map, 0, fd, "Error: Invalid element\n"), 0);
     close(fd);
-    if(!validate_components(&map) || !is_map_closed(&map))
-        return(clean_exit(&map, 0, -1), 0);
+    if(!validate_compon1ents(&map) || !is_map_closed(&map))
+        return(clean_exit(&map, 0, -1, "Error: Invalid components\n"), 0);
 }
