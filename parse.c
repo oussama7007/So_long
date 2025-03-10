@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/09 03:03:06 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/09 23:39:18 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,22 @@ void clean_map(t_map *map)
         free(map->grid);
     }
 }
-int clean_exit(t_map *map, int status, int fd)
+void    ft_putstr(char *str)
 {
-    if(map) clean_map(map);
-    if(fd > 0) close(fd);
+    while(*str)
+    {
+        write(1, &str, 1);
+        str++
+    }
+}
+int clean_exit(t_map *map, int status, int fd, char *str)
+{
+    if(map) 
+        clean_map(map);
+    if(str) 
+        ft_putstr(str);
+    if(fd > 0) 
+        close(fd);
     return (status);
 }
 int get_map_dimensions(int fd, t_map *map)
@@ -73,8 +85,8 @@ int get_map_dimensions(int fd, t_map *map)
         free(line);
         map->height++;
     }
-    map->whidth = first_line_len;
-    return(map->height > 2 && map > 2);
+    map->width = first_line_len;
+   return (map->height > 2 && map->width > 2); // return (map->height > 2 && map->width > 4);
 }
 int init_map_storage(t_map *map)
 {
@@ -88,14 +100,13 @@ int init_map_storage(t_map *map)
 	return (1); 
 }
 
-Copy
 int	process_line(t_map *map, char *line, int y)
 {
 	size_t	len;
 	int		x;
 
 	if (!line || !(map->grid[y] = ft_strdup(line)))
-		return (0);
+		return (free(line),0);
 	len = ft_strlen(map->grid[y]);
 	if (len > 0 && map->grid[y][len - 1] == '\n' && len--)
 		map->grid[y][len] = '\0';
@@ -117,43 +128,50 @@ int	process_line(t_map *map, char *line, int y)
 	}
 	return (1);
 }
-int     load_map(char *filename, t_map *map)
+int     load_map(int fd, t_map *map)
 {
-    int fd;
     char *line;
     int y;
 
-    fd = open(filename, O_RDONLY);
     if(fd < 0 || !init_map_storage(map))
         return 0;
     y = -1;
     while( ++y < map->height)
     {
         line = get_next_line(fd);
-        if(!process_line(map, line, y))
+        if(!line || !process_line(map, line, y))
         {
-            free(line);
-            return(clean_map(map, y), close(fd), 0);
+            if (line)
+                 free(line);
+            return(clean_map(map),0);
         }
         free(line);
     }
-    free(line);
-    return 1;
+    // ******** test this part  by rmoving it and add white space the map in separate line leak ...  /\/
+    line = get_next_line(fd);
+    if(line)
+    {
+        free(line);
+        return(clean_map(map),0);
+    }
+    return (1);
 }
 int validate_map(char *filename)
 {
     int fd;
     t_map map;
 
-    map = {0};
+    ft_memset(&map, 0, sizeof(t_map));
     fd = open(filename, O_RDONLY);
     if(!check_extention(filename) || fd < 0)
-        return(clean_exit(NULL, 0, fd));
-    if(!get_map_dimensions(fd &map))
-        return (clean_exit(NULL, 0, fd));
+                return(clean_exit(&map, 0, fd, "Error: where the file extention or file name is incorrect \n"), 0);
+    if(!get_map_dimensions(fd, &map))
+            return(clean_exit(&map, 0, fd, "Error: map dimensions are incorrect must be at least 3x3\n"), 0);
     close(fd);
     fd = open(filename, O_RDONLY);
-    if(!load_map(fd, &map))
-        return(clean_exit(NULL, 0, fd))
+    if(fd < 0 || !load_map(fd, &map))
+        return(clean_exit(&map, 0, fd, "Error: the map has invalid element\n"), 0);
     close(fd);
+    if(!validate_components(&map) || !is_map_closed(&map))
+        return(clean_exit(&map, 0, -1), 0);
 }
