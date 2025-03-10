@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/10 03:54:04 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/10 20:34:22 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,83 @@ int     is_map_closed(t_map *map)
         }
         return 1;
 }
-int 
+
+
+/*//How It Works
+Duplicate the Map:
+
+Creates a copy of the map to avoid modifying the original.
+
+Initialize Visited Matrix:
+
+Tracks which cells have been explored.
+
+Start BFS from Player’s Position:
+
+Adds the player’s starting position to the queue.
+
+Explore Neighbors:
+
+Checks up, down, left, and right for valid, unvisited cells.
+
+Adds valid cells to the queue.
+
+Track Collectibles and Exit:
+
+Counts Cs and checks if E is reachable.
+
+Cleanup:
+
+Frees the duplicated grid and visited matrix.
+
+Validation:
+
+Returns 1 if all Cs are collected and E is reachable; otherwise, 0.*/
+char *ft_strdup(char *str)
+{
+    char *new;
+    int i;
+    int size;
+
+    size = ft_strlen(str);
+    i = -1;
+    new = malloc(size + 1);
+    if(!new)
+        return NULL;
+    while(++i < size)
+        new[i] = str[i];
+    new[i] = '\0';
+    return new;
+}
+char **mimc_map(t_map *map)
+{
+        char **copy;
+        int y;
+        
+        copy = (char **)malloc((sizeof(char *) * map->height));
+        it(!copy)
+            return NULL:
+        y = -1;
+        while(++y < map->height)
+        {
+            copy[y] = ft_strdup(map->grid[y]);
+            if(!copy[y])
+            {
+                while(y-- >= 0)
+                    free(copy[y])
+                free(copy);
+                return NULL;
+            }
+        }
+        return (copy);
+}
+
+int validate_components(t_map *map)
+{
+    char **new;
+
+    new = mimc_map(map);   
+}
 int validate_map(char *filename)
 {
     int fd;
@@ -192,6 +268,6 @@ int validate_map(char *filename)
     if(fd < 0 || !load_map(fd, &map))
         return(clean_exit(&map, 0, fd, "Error: Invalid element\n"), 0);
     close(fd);
-    if(!validate_compon1ents(&map) || !is_map_closed(&map))
+    if(!validate_components(&map) || !is_map_closed(&map))
         return(clean_exit(&map, 0, -1, "Error: Invalid components\n"), 0);
 }
