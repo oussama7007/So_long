@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/11 01:07:28 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/11 01:59:31 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void    ft_putstr(char *str)
 {
     while(*str)
     {
-        write(1, &str, 1);
+        write(1, str, 1);
         str++
     }
 }
@@ -238,43 +238,48 @@ char **mimc_map(t_map *map)
             copy[y] = ft_strdup(map->grid[y]);
             if(!copy[y])
             {
-                while(y-- >= 0)
-                    free(copy[y])
-                free(copy);
+                free_dubel(copy, y)
                 return NULL;
             }
         }
         return (copy);
 }
-void free_dubel(char **str)
+void free_dubel(char **str, int height)
 {
-    while(*str)
-    {
-        free(*str);
-        str++;
-    }
+    int i;
+
+    i = -1;
+    while(++i < height)
+        free(str[i]);
     free(str);
 }
-int validate_components(t_map *map, int map->player.x, int map->player.y, char prevC, char newC)
+void    flood_fill(t_map *map, char **grid, int x, int y)
+{
+    if(y >= map->height || x >= map->width || grid[y][x] == '1')
+        return;
+    if(grid[y][x] == 'E')
+    {
+        map->reachable = 1;
+        return;
+    }
+    grid[y][x] = '1';
+    flood_fill(map, grid, x + 1, y);
+    flood_fill(map, grid, x - 1, y);
+    flood_fill(map, grid, x, y + 1);
+    flood_fill(map, grid, x, y - 1);
+}
+int validate_components(t_map *map)
 {
     char **new;
+    
     new = mimc_map(map);
     if(!new)
         return 0;
-    if(map->player.y < 0 || map->player.x < 0 || map->player.y >= map->height 
-        || map->player.x >= map->width)
-        return(free_dubel(new), 0);
-    if(new[ map->player.y][map->player.x] != prevC)
-        return(free_dubel(new), 0);
-    new[ map->player.y][map->player.x] = newC;
+    map->reachable = 0;
+    flood_fill(map, new, map->player.x, map->player.y);
+    free_dubel(new, map->height);
     
-    if(new[ map->player.y][map->player.x] == 'E')
-        return(free_dubel(new), 1);
-    validate_components(map, map->player.x + 1, map->player.y, prevC, newC);
-    validate_components(map, map->player.x - 1, map->player.y, prevC, newC);
-    validate_components(map, map->player.x , map->player.y + 1, prevC, newC);
-    validate_components(map, map->player.x, map->player.y - 1, prevC, newC);
-    
+    return(map->reachable);
 }
 int validate_map(char *filename)
 {
@@ -292,6 +297,9 @@ int validate_map(char *filename)
     if(fd < 0 || !load_map(fd, &map))
         return(clean_exit(&map, 0, fd, "Error: Invalid element\n"), 0);
     close(fd);
-    if(!validate_components(&map) || !is_map_closed(&map))
-        return(clean_exit(&map, 0, -1, "Error: Invalid components\n"), 0);
+     if(!is_map_closed(&map))
+        return(clean_exit(&map, -1, "Error:map isn't cllosed with walls\n"), 0);
+    if(!validate_components(&map))
+        return(clean_exit(&map, -1, "Error: Exit isn't reachable\n"), 0);
+   
 }

@@ -19,7 +19,8 @@ typedef struct s_map{
     t_point exit;
     int     p_count;
     int     e_count;
-    int     c_count;      
+    int     c_count;
+    int     reachable;      
 }   t_map;
 
 int   check_extention(char *str);
