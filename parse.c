@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/10 20:34:22 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/11 01:07:28 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,6 +207,7 @@ Frees the duplicated grid and visited matrix.
 Validation:
 
 Returns 1 if all Cs are collected and E is reachable; otherwise, 0.*/
+
 char *ft_strdup(char *str)
 {
     char *new;
@@ -245,12 +246,35 @@ char **mimc_map(t_map *map)
         }
         return (copy);
 }
-
-int validate_components(t_map *map)
+void free_dubel(char **str)
+{
+    while(*str)
+    {
+        free(*str);
+        str++;
+    }
+    free(str);
+}
+int validate_components(t_map *map, int map->player.x, int map->player.y, char prevC, char newC)
 {
     char **new;
-
-    new = mimc_map(map);   
+    new = mimc_map(map);
+    if(!new)
+        return 0;
+    if(map->player.y < 0 || map->player.x < 0 || map->player.y >= map->height 
+        || map->player.x >= map->width)
+        return(free_dubel(new), 0);
+    if(new[ map->player.y][map->player.x] != prevC)
+        return(free_dubel(new), 0);
+    new[ map->player.y][map->player.x] = newC;
+    
+    if(new[ map->player.y][map->player.x] == 'E')
+        return(free_dubel(new), 1);
+    validate_components(map, map->player.x + 1, map->player.y, prevC, newC);
+    validate_components(map, map->player.x - 1, map->player.y, prevC, newC);
+    validate_components(map, map->player.x , map->player.y + 1, prevC, newC);
+    validate_components(map, map->player.x, map->player.y - 1, prevC, newC);
+    
 }
 int validate_map(char *filename)
 {
