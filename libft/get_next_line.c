@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 12:17:40 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/04 16:52:41 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/11 21:38:08 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,13 +107,4 @@ char	*get_next_line(int fd)
 		return (free(buffer), buffer = NULL, NULL);
 	buffer = next_line(buffer);
 	return (line);
-}
-
-int main(void)
-{
-	int fd;
-	fd = open("text.txt", O_RDWR);
-	char *line;
-	line = get_next_line(fd);
-	printf("%s", line);
 }

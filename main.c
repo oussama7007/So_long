@@ -6,15 +6,14 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 08:53:58 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/03 16:25:33 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/11 21:33:16 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "includes/so_long.h"
 
 int main(int ac , char **av)
 {
-    int fd;
     if(ac != 2 )
       return 0;
     if(validate_map(av[1]) == 0)

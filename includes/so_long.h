@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include "mlx.h"
 #include <stdlib.h>
-#include "get_next_line.h"
+#include "../includes/get_next_line.h"
 
 typedef struct s_point{
     int x;
@@ -20,7 +20,8 @@ typedef struct s_map{
     int     p_count;
     int     e_count;
     int     c_count;
-    int     reachable;      
+    int     exit_reachable;
+    int     c_collected;     
 }   t_map;
 
 int   check_extention(char *str);

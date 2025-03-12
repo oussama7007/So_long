@@ -6,11 +6,12 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/11 01:59:31 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/12 01:03:55 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "includes/so_long.h"
+
 
 int   check_extention(char *filename)
 {
@@ -31,16 +32,31 @@ int   check_extention(char *filename)
     }
     return 1;
 }
+char *ft_strdup(char *str)
+{
+    char *new;
+    int i;
+    int size;
 
+    size = ft_strlen(str);
+    i = -1;
+    new = malloc(size + 1);
+    if(!new)
+        return NULL;
+    while(++i < size)
+        new[i] = str[i];
+    new[i] = '\0';
+    return new;
+}
 void clean_map(t_map *map)
 {
     int i;
 
-    i = -1;
+    i = 0;
     if(map->grid)
     {
-        while(++i < map->height)
-            free(map->grid[i]);
+        while(i < map->height)
+            free(map->grid[i++]);
         free(map->grid);
     }
 }
@@ -49,7 +65,7 @@ void    ft_putstr(char *str)
     while(*str)
     {
         write(1, str, 1);
-        str++
+        str++;
     }
 }
 int clean_exit(t_map *map, int status, int fd, char *str)
@@ -87,6 +103,20 @@ int get_map_dimensions(int fd, t_map *map)
     }
     map->width = first_line_len;
    return (map->height > 2 && map->width > 2); // return (map->height > 2 && map->width > 4);
+}
+void  *ft_memset(void *str, int value, size_t len)
+{
+    unsigned char *p;
+    size_t i ;
+    
+    p = (unsigned char *)str;
+    i = 0;
+    while(i < len)
+    {
+        p[i] = (unsigned char)value;
+        i++;
+    }
+    return(str);
 }
 int init_map_storage(t_map *map)
 {
@@ -170,7 +200,7 @@ int     is_map_closed(t_map *map)
         }
         while(++x < map->width)
         {
-            if(map->grid[0][x] != '1' || map->grid[map->height - 1] != '1')
+            if(map->grid[0][x] != '1' || map->grid[map->height - 1][x] != '1')
                 return 0;
         }
         return 1;
@@ -207,38 +237,23 @@ Frees the duplicated grid and visited matrix.
 Validation:
 
 Returns 1 if all Cs are collected and E is reachable; otherwise, 0.*/
+void free_dubel(char **str, int height);
 
-char *ft_strdup(char *str)
-{
-    char *new;
-    int i;
-    int size;
-
-    size = ft_strlen(str);
-    i = -1;
-    new = malloc(size + 1);
-    if(!new)
-        return NULL;
-    while(++i < size)
-        new[i] = str[i];
-    new[i] = '\0';
-    return new;
-}
 char **mimc_map(t_map *map)
 {
         char **copy;
         int y;
         
         copy = (char **)malloc((sizeof(char *) * map->height));
-        it(!copy)
-            return NULL:
+        if(!copy)
+            return NULL;
         y = -1;
         while(++y < map->height)
         {
             copy[y] = ft_strdup(map->grid[y]);
             if(!copy[y])
             {
-                free_dubel(copy, y)
+                free_dubel(copy, y);
                 return NULL;
             }
         }
@@ -258,10 +273,9 @@ void    flood_fill(t_map *map, char **grid, int x, int y)
     if(y >= map->height || x >= map->width || grid[y][x] == '1')
         return;
     if(grid[y][x] == 'E')
-    {
-        map->reachable = 1;
-        return;
-    }
+       map->exit_reachable++;
+    if(grid[y][x] == 'C')
+        map->c_collected++;
     grid[y][x] = '1';
     flood_fill(map, grid, x + 1, y);
     flood_fill(map, grid, x - 1, y);
@@ -275,11 +289,12 @@ int validate_components(t_map *map)
     new = mimc_map(map);
     if(!new)
         return 0;
-    map->reachable = 0;
+    map->exit_reachable = 0;
+    map->c_collected = 0;
     flood_fill(map, new, map->player.x, map->player.y);
     free_dubel(new, map->height);
     
-    return(map->reachable);
+    return(map->c_collected == map->c_count && map->exit_reachable == 1);
 }
 int validate_map(char *filename)
 {
@@ -289,17 +304,19 @@ int validate_map(char *filename)
     ft_memset(&map, 0, sizeof(t_map));
     fd = open(filename, O_RDONLY);
     if(!check_extention(filename) || fd < 0)
-                return(clean_exit(&map, 0, fd, "Error: where the file extention or file name is incorrect \n"), 0);
+                return(clean_exit(&map, 0, fd, "Error\nwhere the file extention or file name is incorrect \n"), 0);
     if(!get_map_dimensions(fd, &map))
-            return(clean_exit(&map, 0, fd, "Error: map dimensions are incorrect must be at least 3x3\n"), 0);
+            return(clean_exit(&map, 0, fd, "Error\nmap dimensions are incorrect must be at least 3x3\n"), 0);
     close(fd);
     fd = open(filename, O_RDONLY);
     if(fd < 0 || !load_map(fd, &map))
-        return(clean_exit(&map, 0, fd, "Error: Invalid element\n"), 0);
+        return(clean_exit(&map, 0, fd, "Error\nInvalid element\n"), 0);
     close(fd);
-     if(!is_map_closed(&map))
-        return(clean_exit(&map, -1, "Error:map isn't cllosed with walls\n"), 0);
+    if (map.p_count != 1 || map.e_count != 1 || map.c_count < 1)
+                return (clean_exit(&map, 0, -1, "Error\nInvalid P/E/C count\n")), 
+    if(!is_map_closed(&map))
+        return(clean_exit(&map, 0,-1, "Error\nmap isn't cllosed with walls\n"), 0);
     if(!validate_components(&map))
-        return(clean_exit(&map, -1, "Error: Exit isn't reachable\n"), 0);
-   
+        return(clean_exit(&map, 0,-1, "Error\nExit isn't reachable\n"), 0);
+    return 1;
 }
