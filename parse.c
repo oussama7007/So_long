@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/12 01:03:55 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/12 21:12:47 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int get_map_dimensions(int fd, t_map *map)
     int first_line_len;
     size_t len;
 
-    first_line_len = -1;
+    first_line_len = 0;
     map->height = 0;
     while((line = get_next_line(fd)))
     {
@@ -102,7 +102,7 @@ int get_map_dimensions(int fd, t_map *map)
         map->height++;
     }
     map->width = first_line_len;
-   return (map->height > 2 && map->width > 2); // return (map->height > 2 && map->width > 4);
+   return (map->height > 2 && map->width > 4);
 }
 void  *ft_memset(void *str, int value, size_t len)
 {
@@ -304,16 +304,16 @@ int validate_map(char *filename)
     ft_memset(&map, 0, sizeof(t_map));
     fd = open(filename, O_RDONLY);
     if(!check_extention(filename) || fd < 0)
-                return(clean_exit(&map, 0, fd, "Error\nwhere the file extention or file name is incorrect \n"), 0);
+                return(clean_exit(&map, 0, fd, "Error\nWhether the file extention or file name is incorrect \n"), 0);
     if(!get_map_dimensions(fd, &map))
-            return(clean_exit(&map, 0, fd, "Error\nmap dimensions are incorrect must be at least 3x3\n"), 0);
+           return(clean_exit(&map, 0, fd, "Error\nmap dimensions are incorrect must be at least 3x5\n"), 0);
     close(fd);
     fd = open(filename, O_RDONLY);
     if(fd < 0 || !load_map(fd, &map))
         return(clean_exit(&map, 0, fd, "Error\nInvalid element\n"), 0);
     close(fd);
     if (map.p_count != 1 || map.e_count != 1 || map.c_count < 1)
-                return (clean_exit(&map, 0, -1, "Error\nInvalid P/E/C count\n")), 
+                return (clean_exit(&map, 0, -1, "Error\nInvalid P/E/C count\n"));
     if(!is_map_closed(&map))
         return(clean_exit(&map, 0,-1, "Error\nmap isn't cllosed with walls\n"), 0);
     if(!validate_components(&map))
