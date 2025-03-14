@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/12 21:12:47 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/14 07:05:12 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,6 +296,36 @@ int validate_components(t_map *map)
     
     return(map->c_collected == map->c_count && map->exit_reachable == 1);
 }
+void get_screen_resolution(int *width, int *height)
+{
+    void *mlx = mlx_init();
+    *width = 0;
+    *height = 0;
+    mlx_get_screen_size(mlx, width, height);
+    mlx_destroy_display(mlx);
+}
+void get_max_map_dimensions(t_map *map, int *max_width, int *max_height)
+{
+    int screen_width;
+    int creen_height;
+    int title_size = 32;
+    
+    get_screen_resolution(&screen_width, &screen_height);
+    *max_width = screen_width / tile_size;
+    *mac_height = screen_height / tile_size;
+}
+int validate_map_size(t_map *map)
+{
+    int max_width;
+    int max_height;
+
+    get_max_map_dimensions(map, &max_width, &max_height);
+    if(map->width > max_width || map->height > max_height)
+    {
+        return(clean_exit(map, 0, -1, "Error\nMpa is larger than screen resolution\n"))
+    }
+    return 1;
+}
 int validate_map(char *filename)
 {
     int fd;
@@ -308,6 +338,8 @@ int validate_map(char *filename)
     if(!get_map_dimensions(fd, &map))
            return(clean_exit(&map, 0, fd, "Error\nmap dimensions are incorrect must be at least 3x5\n"), 0);
     close(fd);
+    if (!validate_map_size(&map))
+        return 0;
     fd = open(filename, O_RDONLY);
     if(fd < 0 || !load_map(fd, &map))
         return(clean_exit(&map, 0, fd, "Error\nInvalid element\n"), 0);
