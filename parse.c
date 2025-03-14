@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/14 07:05:12 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/14 21:17:14 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,25 +304,25 @@ void get_screen_resolution(int *width, int *height)
     mlx_get_screen_size(mlx, width, height);
     mlx_destroy_display(mlx);
 }
-void get_max_map_dimensions(t_map *map, int *max_width, int *max_height)
+void get_max_map_dimensions(int *max_width, int *max_height)
 {
     int screen_width;
-    int creen_height;
-    int title_size = 32;
+    int screen_height;
+    int tile_size = 32;
     
     get_screen_resolution(&screen_width, &screen_height);
     *max_width = screen_width / tile_size;
-    *mac_height = screen_height / tile_size;
+    *max_height = screen_height / tile_size;
 }
 int validate_map_size(t_map *map)
 {
     int max_width;
     int max_height;
 
-    get_max_map_dimensions(map, &max_width, &max_height);
+    get_max_map_dimensions(&max_width, &max_height);
     if(map->width > max_width || map->height > max_height)
     {
-        return(clean_exit(map, 0, -1, "Error\nMpa is larger than screen resolution\n"))
+        return(clean_exit(map, 0, -1, "Error\nMpa is larger than screen resolution\n"));
     }
     return 1;
 }

@@ -6,11 +6,11 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 12:17:40 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/11 21:38:08 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/14 21:33:51 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/get_next_line.h"
+#include "includes/get_next_line.h"
 #include <stdio.h>
 #include <fcntl.h>
 char	*next_line(char *buffer)

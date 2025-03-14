@@ -2,15 +2,14 @@
 # define SO_LONG_H
 
 #include <fcntl.h>
-#include "mlx.h"
+#include "../mlx/mlx.h"
 #include <stdlib.h>
-#include "../includes/get_next_line.h"
+#include "get_next_line.h"
 
 typedef struct s_point{
     int x;
     int y;
-}   t_point;
-
+} t_point;
 typedef struct s_map{
     char **grid;
     int height;

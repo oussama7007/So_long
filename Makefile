@@ -1,30 +1,33 @@
-Name = so_long
+# Root Makefile
 
-#libs =  -Llibft -lft -Lminilibx -lmlx -framework OpenGL -framework AppKit
-INCLUDES = -I includes
+NAME = so_long
+LIBS = -lmlx -framework OpenGL -framework AppKit
 
-cc = cc
-cflags = -Wall -Werror -Wextra 
+INCLUDES = -I includes  
 
-srs = main.c parse.c libft/get_next_line.c \
-	  libft/get_next_line_utils.c
+CC = cc
+CFLAGS = -Wall -Werror -Wextra
 
-objcts = $(srs:.c=.o)
+SRCS = main.c parse.c get_next_line.c get_next_line_utils.c
+OBJS = $(SRCS:.c=.o)
 
-all : $(Name)
+all: $(NAME)  
 
-$(Name) : $(objcts)
-	$(cc) $(cflags) $(INCLUDES) $(objcts) -o $(Name)
 
-%.o: %.c  includes/so_long.h
-	$(cc) $(cflags) $(INCLUDES) -c $< -o $@
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBS) -o $(NAME)
 
-clean :
-	rm -rf $(objcts)
+%.o: %.c includes/so_long.h 
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-fclean :clean
-	rm -rf $(Name)
+clean:
+	rm -rf $(OBJS)
+	
 
-re :fclean all
+fclean: clean
+	rm -rf $(NAME)
 
-.PHONY : clean
+
+re: fclean all
+
+.PHONY: all clean fclean re

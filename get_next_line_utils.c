@@ -6,11 +6,11 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 08:25:20 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/13 00:28:45 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/14 21:33:55 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/get_next_line.h"
+#include "includes/get_next_line.h"
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
