@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/15 01:19:53 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/15 19:47:12 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void clean_map(t_map *map)
         while(++i < map->height)
             free(map->grid[i]);
         free(map->grid);
-        //map->grid = NULL;
+        map->grid = NULL;
     }
 }
 void    ft_putstr(char *str)
@@ -69,7 +69,7 @@ void    ft_putstr(char *str)
         str++;
     }
 }
-int clean_exit(t_map *map, int status, int fd, char *str)
+void clean_exit(t_map *map, int fd, char *str)
 {
     if(map) 
         clean_map(map);
@@ -77,7 +77,6 @@ int clean_exit(t_map *map, int status, int fd, char *str)
         ft_putstr(str);
     if(fd > 0) 
         close(fd);
-    return (status);
 }
 int get_map_dimensions(int fd, t_map *map)
 {
@@ -305,18 +304,17 @@ int validate_map(char *filename)
     ft_memset(&map, 0, sizeof(t_map));
     fd = open(filename, O_RDONLY);
     if(!check_extention(filename) || fd < 0)
-                return(clean_exit(&map, 0, fd, "Error\nWhether the file extention or file name is incorrect \n"), 0);
+                return(clean_exit(&map, fd, "Error\nWhether the file extention or file name is incorrect \n"), 0);
     if(!get_map_dimensions(fd, &map))
-           return(clean_exit(&map, 0, fd, "Error\nmap dimensions are incorrect must be at least 3x5\n"), 0);
+           return(clean_exit(&map, fd, "Error\nmap dimensions are incorrect must be at least 3x5\n"), 0);
     close(fd);
-   
     fd = open(filename, O_RDONLY);
     if(fd < 0 || !load_map(fd, &map))
-        return(clean_exit(&map, 0, fd, "Error\nInvalid element\n"), 0);
+        return(clean_exit(&map, fd, "Error\nInvalid element\n"), 0);
     close(fd);
     if(!is_map_closed(&map))
-        return(clean_exit(&map, 0,-1, "Error\nmap isn't cllosed with walls\n"), 0);
+        return(clean_exit(&map, -1, "Error\nmap isn't closed with walls\n"), 0);
     if(!validate_components(&map))
-        return(clean_exit(&map, 0,-1, "Error\nExit isn't reachable\n"), 0);
+        return(clean_exit(&map, -1, "Error\nExit isn't reachable\n"), 0);
     return 1;
 }
