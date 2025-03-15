@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/15 00:39:12 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/15 01:19:53 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,13 @@ void clean_map(t_map *map)
 {
     int i;
 
-    i = 0;
+    i = -1;
     if(map->grid)
     {
-        while(i < map->height)
-            free(map->grid[i++]);
+        while(++i < map->height)
+            free(map->grid[i]);
         free(map->grid);
+        //map->grid = NULL;
     }
 }
 void    ft_putstr(char *str)
@@ -136,12 +137,12 @@ int	process_line(t_map *map, char *line, int y)
 	int		x;
 
 	if (!line || !(map->grid[y] = ft_strdup(line)))
-		return (free(line),0);
+		return (0);
 	len = ft_strlen(map->grid[y]);
 	if (len > 0 && map->grid[y][len - 1] == '\n' && len--)
 		map->grid[y][len] = '\0';
 	if (len != (size_t)map->width)
-		return (free(map->grid[y]), 0);
+		return (free(map->grid[y]),map->grid[y] = NULL, 0);
 	x = -1;
 	while (++x < map->width)
 	{
@@ -152,9 +153,9 @@ int	process_line(t_map *map, char *line, int y)
 		else if (map->grid[y][x] == 'C')
 			map->c_count++;
 		else if (!ft_strchr("01", map->grid[y][x]))
-			return (free(map->grid[y]), 0);
+			return (free(map->grid[y]),map->grid[y] = NULL, 0);
 		if (map->p_count > 1 || map->e_count > 1)
-			return (free(map->grid[y]), 0);
+			return (free(map->grid[y]), map->grid[y] = NULL, 0);
 	}
 	return (1);
 }
