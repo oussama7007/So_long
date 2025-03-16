@@ -22,11 +22,23 @@ typedef struct s_map{
     int     exit_reachable;
     int     c_collected;     
 }   t_map;
+typedef struct s_game{
+    void *mlx;
+    t_map map;
+} t_game;
 
-int   check_extention(char *str);
-int   main(int ac , char **av);
-int validate_map(char *str);
-int extract_map_content(int fd);
-int count_num_of_line(int fd);
+// // Parsing
+// int validate_map(char *filename);
+// int get_map_dimensions(int fd, t_map *map);
+// int load_map(int fd, t_map *map);
+// int is_map_closed(t_map *map);
 
+// // Game
+// void init_game(t_game *game);
+// int handle_keypress(int keycode, t_game *game);
+// void clean_exit(t_game *game, char *msg);
+
+// // Utils
+// void clean_map(t_map *map);
+// int check_extention(char *filename);
 #endif 

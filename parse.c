@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/15 19:47:12 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/15 22:06:39 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,5 +316,6 @@ int validate_map(char *filename)
         return(clean_exit(&map, -1, "Error\nmap isn't closed with walls\n"), 0);
     if(!validate_components(&map))
         return(clean_exit(&map, -1, "Error\nExit isn't reachable\n"), 0);
-    return 1;
+   //return(clean_exit(&map, -1, NULL), 1);
+     
 }

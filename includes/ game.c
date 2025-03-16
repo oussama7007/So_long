@@ -1,36 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*    game.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/28 08:53:58 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/16 04:25:33 by oait-si-         ###   ########.fr       */
+/*   Created: 2025/03/16 01:33:07 by oait-si-          #+#    #+#             */
+/*   Updated: 2025/03/16 04:21:05 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/so_long.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include "mlx.h"
-// void f()
-// {
-//     system("leaks so_long");
-// }
-int main(int ac , char **av)
+#include "so_long.h"
+
+void clean_exit(t_game *game, char *msg)
 {
-  //t_game game;
-   // atexit(f);
-    if(ac != 2 )
+    if(msg)
+        perror(msg);
+    if(game->win)
+        mlx_destroy_window(gam->mlx, game->win);
+    if(game->mlx)
     {
-        perror("Error:\n Enter only one mapname.ber\n");
-        return 0;
+        mlx_destroy_dislplay(game->mlx);
+        free(game->mlx);
     }
-    if(validate_map(av[1]) == 0)
-        return 0;
-    // init_game(&game);
-    // mlx_loop(game.mlx);
-    return 0;
- 
+    clean_map(&game->map);
+    exit(0);
+}
+void init_game(t_game *game)
+{
+    game->mlx = mlx_init();
+    if(!game->mlx)
+        
 }
