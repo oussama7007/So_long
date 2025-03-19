@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/so_long.h"
+#include "so_long.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "mlx.h"
@@ -27,7 +27,7 @@ int main(int ac , char **av)
         perror("Error:\n Enter only one mapname.ber\n");
         return 0;
     }
-    if(validate_map(av[1]) == 0)
+    if(validate_map(av[1]))
         return 0;
     // init_game(&game);
     // mlx_loop(game.mlx);

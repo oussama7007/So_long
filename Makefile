@@ -8,7 +8,7 @@ INCLUDES = -I includes
 CC = cc
 CFLAGS = -Wall -Werror -Wextra #-fsanitize=address -g3
 
-SRCS = main.c parse.c get_next_line.c get_next_line_utils.c
+SRCS = src/main.c src/parse.c  get_next_line/get_next_line.c  get_next_line_utils.c 
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)  
@@ -17,7 +17,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBS) -o $(NAME)
 
-%.o: %.c includes/so_long.h 
+%.o: %.c  includes/so_long.h  includes/get_next_line.h
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:

@@ -27,18 +27,22 @@ typedef struct s_game{
     t_map map;
 } t_game;
 
-// // Parsing
-// int validate_map(char *filename);
-// int get_map_dimensions(int fd, t_map *map);
-// int load_map(int fd, t_map *map);
-// int is_map_closed(t_map *map);
+// Parsing
+int validate_map(char *filename);
+int get_map_dimensions(int fd, t_map *map);
+int load_map(int fd, t_map *map);
+int is_map_closed(t_map *map);
 
-// // Game
-// void init_game(t_game *game);
-// int handle_keypress(int keycode, t_game *game);
-// void clean_exit(t_game *game, char *msg);
+// Game
+void init_game(t_game *game);
+int handle_keypress(int keycode, t_game *game);
+//void clean_exit(t_game *game, char *msg);
 
-// // Utils
-// void clean_map(t_map *map);
-// int check_extention(char *filename);
+// Utils
+void clean_map(t_map *map);
+int check_extention(char *filename);
+
+
+void clean_exit(t_map *map, int fd, char *str);
+
 #endif 

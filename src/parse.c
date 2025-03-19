@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/so_long.h"
+#include "so_long.h"
 
 
 int   check_extention(char *filename)
@@ -295,7 +295,7 @@ int validate_components(t_map *map)
     free_dubel(new, map->height);
     
     return(map->c_collected == map->c_count && map->exit_reachable == 1);
-}Q
+}
 int validate_map(char *filename)
 {
     int fd;
@@ -316,6 +316,6 @@ int validate_map(char *filename)
         return(clean_exit(&map, -1, "Error\nmap isn't closed with walls\n"), 0);
     if(!validate_components(&map))
         return(clean_exit(&map, -1, "Error\nExit isn't reachable\n"), 0);
-   //return(clean_exit(&map, -1, NULL), 1);
+   return(clean_exit(&map, -1, NULL), 1);
      
 }
