@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/15 22:06:39 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/18 22:25:43 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,7 +295,7 @@ int validate_components(t_map *map)
     free_dubel(new, map->height);
     
     return(map->c_collected == map->c_count && map->exit_reachable == 1);
-}
+}Q
 int validate_map(char *filename)
 {
     int fd;
