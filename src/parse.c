@@ -102,7 +102,7 @@ int get_map_dimensions(int fd, t_map *map)
         map->height++;
     }
     map->width = first_line_len;
-   return (map->height > 2 && map->width > 4);
+   return (map->height > 2 && map->width > 2);
 }
 void  *ft_memset(void *str, int value, size_t len)
 {
@@ -126,7 +126,7 @@ int init_map_storage(t_map *map)
 	map->grid = (char **)malloc(sizeof(char *) * map->height);
 	if (!map->grid)
 		return (0);
-	ft_memset(map->grid, 0, sizeof(char *) * map->height);
+	//ft_memset(map->grid, 0, sizeof(char *) * map->height);
 	return (1); 
 }
 
