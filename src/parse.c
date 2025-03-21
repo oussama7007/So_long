@@ -316,6 +316,6 @@ int validate_map(char *filename)
         return(clean_exit(&map, -1, "Error\nmap isn't closed with walls\n"), 0);
     if(!validate_components(&map))
         return(clean_exit(&map, -1, "Error\nExit isn't reachable\n"), 0);
-   return(clean_exit(&map, -1, NULL), 1);
-     
+    return(clean_exit(&map, -1, NULL), 1);
+  
 }

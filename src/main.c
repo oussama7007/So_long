@@ -14,23 +14,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "mlx.h"
-// void f()
-// {
-//     system("leaks so_long");
-// }
+void f()
+{
+    //system("leaks so_long");
+}
 int main(int ac , char **av)
 {
-  //t_game game;
-   // atexit(f);
+  t_game game;
+   //atexit(f);
+   ft_memset(&game, 0, sizeof(t_game));  
     if(ac != 2 )
     {
-        perror("Error:\n Enter only one mapname.ber\n");
+        perror("Error:\n Enter only one map.ber\n");
         return 0;
     }
     if(validate_map(av[1]))
         return 0;
-    // init_game(&game);
-    // mlx_loop(game.mlx);
+    
+    init_game(&game);
+    mlx_loop(game.mlx);
+    clean_exit_game(&game, NULL);
     return 0;
  
 }
