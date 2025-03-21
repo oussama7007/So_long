@@ -32,7 +32,7 @@ int main(int ac , char **av)
         return 0;
     ft_putstr_fd("Map is valid. Starting game...\n", 1);
     init_game(&game);
-    mlx_loop(game.mlx);
+   // mlx_loop(game.mlx);
     clean_exit_game(&game, NULL);
     return 0;
  

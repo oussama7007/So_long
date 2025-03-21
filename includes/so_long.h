@@ -61,7 +61,7 @@ int load_map(int fd, t_map *map);
 int is_map_closed(t_map *map);
 
 // Game
-int  init_game(t_game *game);
+void init_game(t_game *game);
 int   handle_keypress(int keycode, t_game *game);
 
 

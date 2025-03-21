@@ -43,7 +43,7 @@ static int handle_close(int event, void *param)
     clean_exit_game(game, NULL);
     return (0);
 }
-int	init_game(t_game *game)
+void	init_game(t_game *game)
 {
 	game->mlx = mlx_init();
 	if (!game->mlx)
@@ -82,19 +82,19 @@ int	init_game(t_game *game)
     if(!game->win)
         clean_exit_game(game, "Error: mlx_new_window() failed.\n");
     ft_putstr_fd("mlx_new_window() success.\n", 1);
-    render_map(game);
+    //render_map(game);
     
+    mlx_loop_hook(game->mlx, render_map, game);
     
     mlx_hook(game->win, 12, 0, handle_expose, game); // 12 = Expose event on macOS
     mlx_hook(game->win, 2, 1L<<0, handle_keypress, game);
     mlx_hook(game->win, 17, 0, handle_close, game);
-   // mlx_loop(game->mlx);
-   return 0;
+    mlx_loop(game->mlx);
+
 }
-
-
 int render_map(void *game_ptr)
 {
+
     t_game  *game = (t_game *)game_ptr; // Add this line
     int x;
     int y;
@@ -176,6 +176,9 @@ int        handle_keypress(int keycode, t_game *game)
     else if (keycode == KEY_ESC)
         clean_exit_game(game, NULL);
     
+    if (new_y < 0 || new_y >= game->map.height || 
+        new_x < 0 || new_x >= game->map.width)
+            return (0);
     if(game->map.grid[new_y][new_x] != '1')
     {
         moves++;
@@ -184,7 +187,7 @@ int        handle_keypress(int keycode, t_game *game)
 
         game->map.player.x = new_x;
         game->map.player.y = new_y;
-        render_map(game);
+        //render_map(game);
     }
     return 0;
 }
