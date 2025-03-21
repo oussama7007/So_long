@@ -25,12 +25,12 @@ int main(int ac , char **av)
    ft_memset(&game, 0, sizeof(t_game));  
     if(ac != 2 )
     {
-        perror("Error:\n Enter only one map.ber\n");
-        return 0;
+        ft_putstr_fd("Error: Enter only one map.ber\n", 2);
+        return 1;
     }
-    if(validate_map(av[1]))
+    if(!validate_map(av[1]))
         return 0;
-    
+    ft_putstr_fd("Map is valid. Starting game...\n", 1);
     init_game(&game);
     mlx_loop(game.mlx);
     clean_exit_game(&game, NULL);

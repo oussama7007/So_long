@@ -61,11 +61,11 @@ int load_map(int fd, t_map *map);
 int is_map_closed(t_map *map);
 
 // Game
-void init_game(t_game *game);
-int handle_keypress(int keycode, t_game *game);
+int  init_game(t_game *game);
+int   handle_keypress(int keycode, t_game *game);
 
 
-void    render_map(t_game *game);
+int    render_map(void *game);
 //void clean_exit(t_game *game, char *msg);
 
 // Utils
@@ -76,6 +76,6 @@ void clean_exit(t_map *map, int fd, char *str);
 
 void ft_putstr_fd(char *s, int fd);
 void  *ft_memset(void *str, int value, size_t len);
-
+void    ft_putnbr(int nb);
 #endif 
    

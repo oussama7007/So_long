@@ -3,6 +3,8 @@
     "github.copilot.editor.enableAutoCompletions": true,
     "files.associations": {
         "so_long.h": "c",
-        "mlx.h": "c"
+        "mlx.h": "c",
+        "stdlib.h": "c",
+        "limits.h": "c"
     }
 }
