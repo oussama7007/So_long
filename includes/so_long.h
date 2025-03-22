@@ -8,7 +8,7 @@
 
 
 
-# define TILE_SIZE 64
+# define TILE_SIZE  60
 # define KEY_ESC 53
 # define KEY_W 13
 # define KEY_A 0

@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/22 01:20:35 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/22 11:54:11 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,10 @@ int	process_line(t_map *map, char *line, int y)
 	while (++x < map->width)
 	{
 		if (map->grid[y][x] == 'P' && ++map->p_count)
-			map->player = (t_point){x, y};
+		{	
+            map->player = (t_point){x, y};
+            map->grid[y][x] = '0';
+        }
 		else if (map->grid[y][x] == 'E' && ++map->e_count)
 			map->exit = (t_point){x, y};
 		else if (map->grid[y][x] == 'C')
