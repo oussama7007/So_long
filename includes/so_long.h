@@ -55,7 +55,7 @@ typedef struct s_game{
 } t_game;
 
 // Parsing
-int validate_map(char *filename);
+int validate_map(char *filename, t_map *map);
 int get_map_dimensions(int fd, t_map *map);
 int load_map(int fd, t_map *map);
 int is_map_closed(t_map *map);

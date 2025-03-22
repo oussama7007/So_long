@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*    game.c                                            :+:      :+:    :+:   */
+/*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 01:33:07 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/21 00:27:05 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/22 01:18:10 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,16 @@ void	init_game(t_game *game)
     if(!game->textures.floor)
         clean_exit_game(game, "Error: Failed to load floor texture.\n");
     ft_putstr_fd("floor texture loaded.\n", 1);
-	game->win = mlx_new_window(game->mlx, game->map.width * TILE_SIZE,
-			game->map.height * TILE_SIZE, "so_long");
+	game->win = mlx_new_window(game->mlx,game->map.height ,game->map.width, "so_long");
+    ft_putnbr(game->map.width * TILE_SIZE);
+    ft_putnbr(game->map.height * TILE_SIZE);
     if(!game->win)
         clean_exit_game(game, "Error: mlx_new_window() failed.\n");
     ft_putstr_fd("mlx_new_window() success.\n", 1);
+    //  mlx_do_sync(game->mlx);
     //render_map(game);
     
-    mlx_loop_hook(game->mlx, render_map, game);
+    //mlx_loop_hook(game->mlx, render_map, game);
     
     mlx_hook(game->win, 12, 0, handle_expose, game); // 12 = Expose event on macOS
     mlx_hook(game->win, 2, 1L<<0, handle_keypress, game);
@@ -117,6 +119,7 @@ int render_map(void *game_ptr)
         }
     }
     ft_putstr_fd("Map rendered.\n", 1);
+
     return (0);
 }
 // void    render_map(void *game)
@@ -187,7 +190,7 @@ int        handle_keypress(int keycode, t_game *game)
 
         game->map.player.x = new_x;
         game->map.player.y = new_y;
-        //render_map(game);
+        render_map(game);
     }
     return 0;
 }

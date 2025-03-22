@@ -6,7 +6,7 @@ LIBS = -lmlx -framework OpenGL -framework AppKit
 INCLUDES = -I includes  
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra #-fsanitize=address -g3
+CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3
 
 SRCS = src/main.c src/parse.c  get_next_line/get_next_line.c  get_next_line/get_next_line_utils.c game.c
 OBJS = $(SRCS:.c=.o)

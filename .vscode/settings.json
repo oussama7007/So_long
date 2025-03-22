@@ -6,5 +6,11 @@
         "mlx.h": "c",
         "stdlib.h": "c",
         "limits.h": "c"
-    }
+    },
+    "github.copilot.editor.enableCodeActions": true,
+    "editor.suggestOnTriggerCharacters": false,
+    "editor.quickSuggestions": {
+        "other": "off"
+    },
+    "editor.parameterHints.enabled": false
 }

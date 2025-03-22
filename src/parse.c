@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/18 22:25:43 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/22 01:20:35 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,27 +296,24 @@ int validate_components(t_map *map)
     
     return(map->c_collected == map->c_count && map->exit_reachable == 1);
 }
-int validate_map(char *filename)
+int validate_map(char *filename, t_map *map)
 {
     int fd;
-    t_map map;
 
-    ft_memset(&map, 0, sizeof(t_map));
     fd = open(filename, O_RDONLY);
     if(!check_extention(filename) || fd < 0)
-                return(clean_exit(&map, fd, "Error\nWhether the file extention or file name is incorrect \n"), 0);
-    if(!get_map_dimensions(fd, &map))
-           return(clean_exit(&map, fd, "Error\nmap dimensions are incorrect must be at least 3x5\n"), 0);
+                return(clean_exit(map, fd, "Error\nWhether the file extention or file name is incorrect \n"), 0);
+    if(!get_map_dimensions(fd, map))
+           return(clean_exit(map, fd, "Error\nmap dimensions are incorrect must be at least 3x5\n"), 0);
     close(fd);
     fd = open(filename, O_RDONLY);
-    if(fd < 0 || !load_map(fd, &map))
-        return(clean_exit(&map, fd, "Error\nInvalid element\n"), 0);
+    if(fd < 0 || !load_map(fd, map))
+        return(clean_exit(map, fd, "Error\nInvalid element\n"), 0);
     close(fd);
-    if(!is_map_closed(&map))
-        return(clean_exit(&map, -1, "Error\nmap isn't closed with walls\n"), 0);
-    if(!validate_components(&map))
-        return(clean_exit(&map, -1, "Error\nExit isn't reachable\n"), 0);
-    //return(clean_exit(&map, -1, NULL), 1);
+    if(!is_map_closed(map))
+        return(clean_exit(map, -1, "Error\nmap isn't closed with walls\n"), 0);
+    if(!validate_components(map))
+        return(clean_exit(map, -1, "Error\nExit isn't reachable\n"), 0);
     return 1;
   
 }
