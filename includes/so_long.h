@@ -47,6 +47,8 @@ typedef struct s_game{
         void *exit;
         void *collectible;
         void *floor;
+        int  coin_width; 
+        int   coin_height;
     } textures;
 
     int moves;

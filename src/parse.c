@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/22 11:54:11 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/22 21:41:42 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int get_map_dimensions(int fd, t_map *map)
         map->height++;
     }
     map->width = first_line_len;
-   return (map->height > 2 && map->width > 2);
+   return (map->height > 2 && map->width > 2 && map->height <= 24 && map->width <= 43);
 }
 void  *ft_memset(void *str, int value, size_t len)
 {
@@ -276,7 +276,10 @@ void    flood_fill(t_map *map, char **grid, int x, int y)
     if(y >= map->height || x >= map->width || grid[y][x] == '1')
         return;
     if(grid[y][x] == 'E')
+    {
        map->exit_reachable++;
+      // return;
+    }
     if(grid[y][x] == 'C')
         map->c_collected++;
     grid[y][x] = '1';
@@ -307,7 +310,7 @@ int validate_map(char *filename, t_map *map)
     if(!check_extention(filename) || fd < 0)
                 return(clean_exit(map, fd, "Error\nWhether the file extention or file name is incorrect \n"), 0);
     if(!get_map_dimensions(fd, map))
-           return(clean_exit(map, fd, "Error\nmap dimensions are incorrect must be at least 3x5\n"), 0);
+           return(clean_exit(map, fd, "Error\nmap dimensions are incorrect must be at least 3x3 and less than 42x44\n"), 0);
     close(fd);
     fd = open(filename, O_RDONLY);
     if(fd < 0 || !load_map(fd, map))
@@ -316,7 +319,7 @@ int validate_map(char *filename, t_map *map)
     if(!is_map_closed(map))
         return(clean_exit(map, -1, "Error\nmap isn't closed with walls\n"), 0);
     if(!validate_components(map))
-        return(clean_exit(map, -1, "Error\nExit isn't reachable\n"), 0);
+        return(clean_exit(map, -1, "Error\nExit isn't reachable or Coins aren't collected\n"), 0);
     return 1;
   
 }

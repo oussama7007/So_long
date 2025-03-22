@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 01:33:07 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/22 14:05:16 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/22 22:12:45 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ void	ft_putstr_fd(char *s, int fd)
 		return ;
 	write(fd, s, ft_strlen(s));
 }
-static int handle_expose(t_game *game) // calls reder_map when the window needs to be redrawn(e.g miinimized/restored)
-{                                       //: Ensures the game screen is refreshed when necessary.
-    render_map((void *)game);
-    return (0);
-}
+// static int handle_expose(t_game *game) // calls reder_map when the window needs to be redrawn(e.g miinimized/restored)
+// {                                       //: Ensures the game screen is refreshed when necessary.
+//     render_map((void *)game);
+//     return (0);
+//}
 void	clean_exit_game(t_game *game, char *msg)
 {
 	if (msg)
@@ -73,19 +73,19 @@ void	init_game(t_game *game) //Initialize mlx -> load texture (mlx_xpm_file_to_i
             clean_exit_game(game, "Error: Failed to load wall texture.\n");
 
 	game->textures.player = mlx_xpm_file_to_image(game->mlx,
-			"textures/player.xpm", &(int){34}, &(int){34});
+			"textures/player.xpm", &(int){64}, &(int){64});
     
     if (!game->textures.player)
         clean_exit_game(game, "Error: Failed to load player texture.\n");
   
 	game->textures.collectible = mlx_xpm_file_to_image(game->mlx,
-			"textures/coin.xpm", &(int){3}, &(int){3});
+			"textures/coin.xpm", &game->textures.coin_width, &game->textures.coin_height);
     
     if (!game->textures.collectible)
         clean_exit_game(game, "Error: Failed to load collectible texture.\n");
- 
+  
 	game->textures.exit = mlx_xpm_file_to_image(game->mlx,
-			"textures/exit.xpm", &(int){1004}, &(int){1004});
+			"textures/exit.xpm", &(int){66}, &(int){66});
     if(!game->textures.exit)
         clean_exit_game(game, "Error: Failed to load exit texture.\n");
     
@@ -99,7 +99,7 @@ void	init_game(t_game *game) //Initialize mlx -> load texture (mlx_xpm_file_to_i
     if(!game->win)
         clean_exit_game(game, "Error: mlx_new_window() failed.\n");
     
-     mlx_do_sync(game->mlx); // forces MINILIbx to synchronize all pending operations immediately Why is this important?
+     //mlx_do_sync(game->mlx); // forces MINILIbx to synchronize all pending operations immediately Why is this important?
     // Normally, MLX batches rendering operations and executes them just before the next frame.
     // mlx_do_sync() ensures that everything is drawn right away instead of waiting for MLX's internal refresh cycle
    //  Helps prevent flickering or delays in rendering.
@@ -115,11 +115,11 @@ void	init_game(t_game *game) //Initialize mlx -> load texture (mlx_xpm_file_to_i
     // Useful for animations or real-time updates.
     // If omitted, the screen only updates when an event occurs (e.g., keypress). 
     
-    mlx_hook(game->win, 12, 0, handle_expose, game); // 12 = Expose event on macOS
+    mlx_hook(game->win, 17, 0, handle_expose , game); // 12 = Expose event on macOS
     mlx_hook(game->win, 2, 1L<<0, handle_keypress, game); // Registers a keypress event (2) → Calls handle_keypress() whenever a key is pressed. // Player presses a key (W, A, S, D, etc.).
     // handle_keypress(keycode, game) gets called.
     // Player moves, and render_map(game) updates the screen.
-    mlx_hook(game->win, 17, 0, handle_close, game); // Registers a window close event (17) → Calls handle_close() when the user clicks the X button.
+   // mlx_hook(game->win, 17, 0, handle_close, game); // Registers a window close event (17) → Calls handle_close() when the user clicks the X button.
     //Calls clean_exit_game(game, NULL), which:
       // Frees allocated memory.
      // Destroys the MLX window.
@@ -149,8 +149,13 @@ int render_map(void *game_ptr)
             mlx_put_image_to_window(game->mlx, game->win, game->textures.floor, x * TILE_SIZE, y * TILE_SIZE);
             if (game->map.grid[y][x] == '1')
                 mlx_put_image_to_window(game->mlx, game->win, game->textures.wall, x * TILE_SIZE, y * TILE_SIZE);
+                
             if (game->map.grid[y][x] == 'C')
-                mlx_put_image_to_window(game->mlx, game->win, game->textures.collectible, x * TILE_SIZE  + (TILE_SIZE - 32) / 2, y * TILE_SIZE  + (TILE_SIZE - 32) / 2 );
+            {
+                //int offest_x = (TILE_SIZE - game->textures.coin_width) / 2;
+                //int offest_y = (TILE_SIZE - game->textures.coin_height) / 2;
+                mlx_put_image_to_window(game->mlx, game->win, game->textures.collectible, x * TILE_SIZE   , y * TILE_SIZE  );
+            }
             if (game->map.grid[y][x] == 'P')
                 mlx_put_image_to_window(game->mlx, game->win, game->textures.player, x * TILE_SIZE, y * TILE_SIZE);
             if (game->map.grid[y][x] == 'E')
