@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 01:33:07 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/22 22:12:45 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/23 00:24:03 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,15 @@ void	clean_exit_game(t_game *game, char *msg)
             free(game->mlx);
         game->mlx = NULL;
     }
+    if (game->mlx)
+    {
+        free(game->mlx); // Required for macOS
+        game->mlx = NULL;
+    }
     clean_map(&game->map);
 	exit(0);
 }
+
 
 static int handle_close(int event, void *param) // calls clean_exit_game whene the X botton is clicked
 {                                                      // :ensures the game exit properly 
@@ -61,6 +67,8 @@ static int handle_close(int event, void *param) // calls clean_exit_game whene t
     clean_exit_game(game, NULL);
     return (0);
 }
+
+
 void	init_game(t_game *game) //Initialize mlx -> load texture (mlx_xpm_file_to_image()) -> create game window mlx_new_window() -> sync and render the map
 {                                   
 	game->mlx = mlx_init(); 
@@ -115,7 +123,7 @@ void	init_game(t_game *game) //Initialize mlx -> load texture (mlx_xpm_file_to_i
     // Useful for animations or real-time updates.
     // If omitted, the screen only updates when an event occurs (e.g., keypress). 
     
-    mlx_hook(game->win, 17, 0, handle_expose , game); // 12 = Expose event on macOS
+    mlx_hook(game->win, 17, 0, handle_close , game); // 12 = Expose event on macOS
     mlx_hook(game->win, 2, 1L<<0, handle_keypress, game); // Registers a keypress event (2) → Calls handle_keypress() whenever a key is pressed. // Player presses a key (W, A, S, D, etc.).
     // handle_keypress(keycode, game) gets called.
     // Player moves, and render_map(game) updates the screen.
