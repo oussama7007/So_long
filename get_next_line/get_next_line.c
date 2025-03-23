@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 12:17:40 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/23 10:32:56 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/23 15:38:04 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,16 @@ char	*next_line(char *buffer)
 		i++;
 	if (!buffer[i])
 		return (free(buffer), buffer = NULL, NULL);
-	new_line =  tracked_malloc(ft_strlen(buffer) - i + 1);
-	//new_line = malloc(ft_strlen(buffer) - i + 1);
+	new_line = malloc(ft_strlen(buffer) - i + 1);
 	if (!new_line)
 	{
-		return (tracked_free(buffer), buffer = NULL, NULL);
-		//return (free(buffer), buffer = NULL, NULL);
+		return (free(buffer), buffer = NULL, NULL);
 	}
 	i++;
 	while (buffer[i])
 		new_line[j++] = buffer[i++];
 	new_line[j] = '\0';
-	tracked_free(buffer);
-	//free(buffer);
+	free(buffer);
 	return (new_line);
 }
 
@@ -53,8 +50,7 @@ char	*new_line(char *buffer)
 		i++;
 	if (buffer[i] == '\n')
 		i++;
-	line = tracked_malloc(i + 1);
-	//line = malloc(i + 1);
+	line = malloc(i + 1);
 	if (!line)
 		return (NULL);
 	i = 0;
@@ -76,8 +72,7 @@ char	*read_file(int fd, char *static_buffer)
 	char	*temp;
 
 	bytes = 1;
-	buffer = tracked_malloc((size_t)BUFFER_SIZE + 1);
-	//buffer = malloc(sizeof(char) * ((size_t)BUFFER_SIZE + 1));
+	buffer = malloc(sizeof(char) * ((size_t)BUFFER_SIZE + 1));
 	if (!buffer)
 		return (NULL);
 	while (bytes != 0)
@@ -85,27 +80,19 @@ char	*read_file(int fd, char *static_buffer)
 		bytes = read(fd, buffer, BUFFER_SIZE);
 		if (bytes < 0)
 		{
-			return(tracked_free(buffer), tracked_free(static_buffer), NULL);
-			//return (free(buffer), free(static_buffer), NULL);
+			return (free(buffer), free(static_buffer), NULL);
 		}
 		buffer[bytes] = '\0';
 		temp = static_buffer;
 		static_buffer = ft_strjoin(static_buffer, buffer);
 		if (!static_buffer)
-		{
-			return (tracked_free(buffer), tracked_free(temp), NULL);
-			//return (free(buffer), free(temp), NULL);
-		}
+			return (free(buffer), free(temp), NULL);
 		if (temp)
-		{
-			tracked_free(temp);
-			//free(temp);
-		}
+			free(temp);
 		if (ft_strchr(static_buffer, '\n'))
 			break ;
 	}
-	tracked_free(buffer);
-	//free(buffer);
+	free(buffer);
 	return (static_buffer);
 }
 
@@ -118,16 +105,10 @@ char	*get_next_line(int fd)
 		return (NULL);
 	buffer = read_file(fd, buffer);
 	if (!buffer)
-	{
-		return(tracked_free(buffer), buffer = NULL, NULL);
-		//return (free(buffer), buffer = NULL, NULL);
-	}
+		return (free(buffer), buffer = NULL, NULL);
 	line = new_line(buffer);
 	if (!line)
-	{
-		return(tracked_free(buffer), buffer = NULL, NULL);
-		//return (free(buffer), buffer = NULL, NULL);
-	}
+		return (free(buffer), buffer = NULL, NULL);
 	buffer = next_line(buffer);
 	return (line);
 }

@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 01:33:07 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/23 10:04:36 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/23 16:57:53 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,48 @@ void	ft_putstr_fd(char *s, int fd)
 //     render_map((void *)game);
 //     return (0);
 //}
-void	clean_exit_game(t_game *game, char *msg)
+// void	clean_exit_game(t_game *game, char *msg)
+// {
+// 	if (msg)
+// 		ft_putstr_fd(msg, 2);
+//     if (game->textures.wall)
+//         mlx_destroy_image(game->mlx, game->textures.wall);
+//     if (game->textures.player)
+//         mlx_destroy_image(game->mlx, game->textures.player);
+//     if (game->textures.collectible)
+//         mlx_destroy_image(game->mlx, game->textures.collectible);
+//     if (game->textures.exit)
+//         mlx_destroy_image(game->mlx, game->textures.exit);
+//     if (game->textures.floor)
+//         mlx_destroy_image(game->mlx, game->textures.floor);
+// 	if (game->win)
+//     {
+//             mlx_clear_window(game->mlx, game->win);
+// 		    mlx_destroy_window(game->mlx, game->win);
+//     }	
+//     if(game->img)
+//     {   
+//         mlx_destroy_image(game->mlx, game->img);
+//         if(game->mlx)
+//             free(game->mlx);
+//         game->mlx = NULL;
+//     }
+//     // if (game->mlx)
+//     // {
+//     //    free(game->mlx); // Required for macOS
+//     //     game->mlx = NULL;
+//     // }
+//     clean_map(&game->map);
+// 	exit(0);
+// }
+
+void    clean_exit_game(t_game *game, char *msg)
 {
-	if (msg)
-		ft_putstr_fd(msg, 2);
+    if (!game)
+          exit(1);
+    if (msg)
+        ft_putstr_fd(msg, 2);
+   
     if (game->textures.wall)
         mlx_destroy_image(game->mlx, game->textures.wall);
     if (game->textures.player)
@@ -38,31 +76,32 @@ void	clean_exit_game(t_game *game, char *msg)
         mlx_destroy_image(game->mlx, game->textures.exit);
     if (game->textures.floor)
         mlx_destroy_image(game->mlx, game->textures.floor);
-	if (game->win)
+    if (game->win)
     {
             mlx_clear_window(game->mlx, game->win);
-		    mlx_destroy_window(game->mlx, game->win);
-    }	
+            mlx_destroy_window(game->mlx, game->win);
+    }
     if(game->img)
     {   
         mlx_destroy_image(game->mlx, game->img);
-        if(game->mlx)
-            free(game->mlx);
-        game->mlx = NULL;
+        // if(game->mlx)
+        // {
+        //     free(game->mlx);
+        //     game->mlx = NULL;
+        // }
+
     }
-    if (game->mlx)
-    {
-       tracked_free(game->mlx);
-       //free(game->mlx); // Required for macOS
-        game->mlx = NULL;
-    }
-    clean_map(&game->map);
-	exit(0);
+    // if (game->mlx)
+    // {
+    //    free(game->mlx); // Required for macOS
+    //     game->mlx = NULL;
+    // }
+    if (game->map.grid)
+        clean_map(&game->map);
+    exit(0);
 }
-
-
 static int handle_close(int event, void *param) // calls clean_exit_game whene the X botton is clicked
-{                                                      // :ensures the game exit properly 
+{                                                     
     t_game *game = (t_game *)param;
     (void)event;
     clean_exit_game(game, NULL);
@@ -77,38 +116,28 @@ void	init_game(t_game *game) //Initialize mlx -> load texture (mlx_xpm_file_to_i
 		clean_exit_game(game, "Error: mlx_init() failed.\n");
 	game->textures.wall = mlx_xpm_file_to_image(game->mlx,
 			"textures/wall.xpm", &(int){64}, &(int){64});
-    
     if (!game->textures.wall)
             clean_exit_game(game, "Error: Failed to load wall texture.\n");
-
 	game->textures.player = mlx_xpm_file_to_image(game->mlx,
 			"textures/player.xpm", &(int){64}, &(int){64});
-    
     if (!game->textures.player)
         clean_exit_game(game, "Error: Failed to load player texture.\n");
-  
 	game->textures.collectible = mlx_xpm_file_to_image(game->mlx,
 			"textures/coin.xpm", &game->textures.coin_width, &game->textures.coin_height);
-    
     if (!game->textures.collectible)
         clean_exit_game(game, "Error: Failed to load collectible texture.\n");
-  
 	game->textures.exit = mlx_xpm_file_to_image(game->mlx,
 			"textures/exit.xpm", &(int){66}, &(int){66});
     if(!game->textures.exit)
         clean_exit_game(game, "Error: Failed to load exit texture.\n");
-    
 	game->textures.floor = mlx_xpm_file_to_image(game->mlx,
 			"textures/floor.xpm", &(int){64}, &(int){64});
-    
     if(!game->textures.floor)
         clean_exit_game(game, "Error: Failed to load floor texture.\n");
-    
 	game->win = mlx_new_window(game->mlx,game->map.width * TILE_SIZE,game->map.height * TILE_SIZE, "first game");
     if(!game->win)
         clean_exit_game(game, "Error: mlx_new_window() failed.\n");
-    
-     mlx_do_sync(game->mlx); // forces MINILIbx to synchronize all pending operations immediately Why is this important?
+    mlx_do_sync(game->mlx); // forces MINILIbx to synchronize all pending operations immediately Why is this important?
     // Normally, MLX batches rendering operations and executes them just before the next frame.
     // mlx_do_sync() ensures that everything is drawn right away instead of waiting for MLX's internal refresh cycle
    //  Helps prevent flickering or delays in rendering.
@@ -216,12 +245,9 @@ int        handle_keypress(int keycode, t_game *game)
     
     if (game->map.grid[new_y][new_x] == 'C')
     {
-        game->map.c_count--; // Decrement coin count
-        game->map.grid[new_y][new_x] = '0'; // Remove coin from grid
+        game->map.c_count--; 
+        game->map.grid[new_y][new_x] = '0'; 
     }
-      // Update grid and player position
-    // game->map.grid[old_y][old_x] = '0'; // Clear old position
-    // game->map.grid[new_y][new_x] = 'P'; // Set new position
     game->map.player.x = new_x;
     game->map.player.y = new_y;
        

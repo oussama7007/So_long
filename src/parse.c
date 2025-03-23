@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/23 14:21:26 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/23 16:03:40 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ char *ft_strdup(char *str)
 
     size = ft_strlen(str);
     i = -1;
-    new = tracked_malloc(size + 1);
-    //new = malloc(size + 1);
+    new = malloc(size + 1);
     if(!new)
         return NULL;
     while(++i < size)
@@ -58,13 +57,12 @@ void clean_map(t_map *map)
     {
         while(++i < map->height)
         {
-            tracked_free(map->grid[i]);
-            //free(map->grid[i]);
+            free(map->grid[i]);
         }
-        tracked_free(map->grid);
-        //free(map->grid);
+        free(map->grid);
         map->grid = NULL;
     }
+    exit(0);
 }
 void    ft_putstr(char *str)
 {
@@ -100,12 +98,10 @@ int get_map_dimensions(int fd, t_map *map)
             first_line_len = len;
         else if((int)len != first_line_len)
         {
-            tracked_free(line);
-            //free(line);
+            free(line);
             return (0);
         }
-        tracked_free(line);
-        //free(line);
+        free(line);
         map->height++;
     }
     map->width = first_line_len;
@@ -130,11 +126,10 @@ int init_map_storage(t_map *map)
        
 	if (map->height < 3 || map->width < 3)
 		return (0);
-	//map->grid = (char **)malloc(sizeof(char *) * map->height);
-    map->grid = tracked_malloc(sizeof(char *) * map->height);
+	map->grid = (char **)malloc(sizeof(char *) * map->height);
 	if (!map->grid)
 		return (0);
-	//ft_memset(map->grid, 0, sizeof(char *) * map->height);
+	ft_memset(map->grid, 0, sizeof(char *) * map->height);
 	return (1); 
 }
 
@@ -150,8 +145,7 @@ int	process_line(t_map *map, char *line, int y)
 		map->grid[y][len] = '\0';
 	if (len != (size_t)map->width)
 		{
-            return(tracked_free(map->grid[y]), map->grid[y] = NULL, 0);
-            //return (free(map->grid[y]),map->grid[y] = NULL, 0);
+            return (free(map->grid[y]),map->grid[y] = NULL, 0);
         }
 	x = -1;
 	while (++x < map->width)
@@ -167,13 +161,11 @@ int	process_line(t_map *map, char *line, int y)
 			map->c_count++;
 		else if (!ft_strchr("01", map->grid[y][x]))
         {
-            return(tracked_free(map->grid[y]), map->grid[y] = NULL, 0);
-			//return (free(map->grid[y]),map->grid[y] = NULL, 0);
+			return (free(map->grid[y]),map->grid[y] = NULL, 0);
         }
         if (map->p_count > 1 || map->e_count > 1)
         {
-            return(tracked_free(map->grid[y]), map->grid[y] = NULL, 0);
-			//return (free(map->grid[y]), map->grid[y] = NULL, 0);
+			return (free(map->grid[y]), map->grid[y] = NULL, 0);
         }
 	}
 	return (1);
@@ -193,20 +185,17 @@ int     load_map(int fd, t_map *map)
         {
             if (line)
             {
-                tracked_free(line);  
-               //  free(line);
+                free(line);
             }
             return(clean_map(map),0);
         }
-        tracked_free(line);
-        //free(line);
+        free(line);
     }
     // ******** test this part  by rmoving it and add white space the map in separate line leak ...  /\/
     line = get_next_line(fd);
     if(line)
     {
-        tracked_free(line);
-        //free(line);
+        free(line);
         return(clean_map(map),0);
     }
     return (1);
@@ -232,36 +221,6 @@ int     is_map_closed(t_map *map)
 }
 
 
-/*//How It Works
-Duplicate the Map:
-
-Creates a copy of the map to avoid modifying the original.
-
-Initialize Visited Matrix:
-
-Tracks which cells have been explored.
-
-Start BFS from Player’s Position:
-
-Adds the player’s starting position to the queue.
-
-Explore Neighbors:
-
-Checks up, down, left, and right for valid, unvisited cells.
-
-Adds valid cells to the queue.
-
-Track Collectibles and Exit:
-
-Counts Cs and checks if E is reachable.
-
-Cleanup:
-
-Frees the duplicated grid and visited matrix.
-
-Validation:
-
-Returns 1 if all Cs are collected and E is reachable; otherwise, 0.*/
 void free_dubel(char **str, int height);
 
 char **mimc_map(t_map *map)
@@ -269,8 +228,7 @@ char **mimc_map(t_map *map)
         char **copy;
         int y;
         
-        copy = tracked_malloc(sizeof(char *) * map->height);
-       // copy = (char **)malloc((sizeof(char *) * map->height));
+       copy = (char **)malloc((sizeof(char *) * map->height));
         if(!copy)
             return NULL;
         y = -1;
@@ -292,11 +250,9 @@ void free_dubel(char **str, int height)
     i = -1;
     while(++i < height)
     {
-        tracked_free(str[i]);
-        //free(str[i]);
+        free(str[i]);
     }
-    tracked_free(str);
-    //free(str);
+    free(str);
 }
 void    flood_fill(t_map *map, char **grid, int x, int y)
 {
@@ -341,35 +297,8 @@ int check_path_to_c(t_map *map)
     free_dubel(test, map->height);
     return(map->c_collected ==  map->c_count);
 }
-void *tracked_malloc(size_t size) {
-    void *ptr = malloc(size);
-    if (ptr) {
-        printf("Allocated: %p from %s\n", ptr, __func__);
-        t_alloc *node = malloc(sizeof(t_alloc));
-        node->ptr = ptr;
-        node->next = g_alloc_list;
-        g_alloc_list = node;
-        printf("Allocated: %p\n", ptr);
-    }
-    return ptr;
-}
 
-void tracked_free(void *ptr) {
-    if (ptr) {
-        // printf("Freed: %p\n", ptr);
-        t_alloc **node = &g_alloc_list;
-        while (*node) {
-            if ((*node)->ptr == ptr) {
-                t_alloc *temp = *node;
-                *node = temp->next;
-                free(temp);
-            }
-            else 
-                node = &(*node)->next;
-        }
-        free(ptr);
-    }
-}
+
 int validate_components(t_map *map)
 {
     char **new;
