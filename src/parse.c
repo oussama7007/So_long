@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:00:51 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/23 07:03:56 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/23 14:21:26 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ char *ft_strdup(char *str)
 
     size = ft_strlen(str);
     i = -1;
-    new = malloc(size + 1);
+    new = tracked_malloc(size + 1);
+    //new = malloc(size + 1);
     if(!new)
         return NULL;
     while(++i < size)
@@ -56,8 +57,12 @@ void clean_map(t_map *map)
     if(map->grid)
     {
         while(++i < map->height)
-            free(map->grid[i]);
-        free(map->grid);
+        {
+            tracked_free(map->grid[i]);
+            //free(map->grid[i]);
+        }
+        tracked_free(map->grid);
+        //free(map->grid);
         map->grid = NULL;
     }
 }
@@ -95,10 +100,12 @@ int get_map_dimensions(int fd, t_map *map)
             first_line_len = len;
         else if((int)len != first_line_len)
         {
-            free(line);
+            tracked_free(line);
+            //free(line);
             return (0);
         }
-        free(line);
+        tracked_free(line);
+        //free(line);
         map->height++;
     }
     map->width = first_line_len;
@@ -123,7 +130,8 @@ int init_map_storage(t_map *map)
        
 	if (map->height < 3 || map->width < 3)
 		return (0);
-	map->grid = (char **)malloc(sizeof(char *) * map->height);
+	//map->grid = (char **)malloc(sizeof(char *) * map->height);
+    map->grid = tracked_malloc(sizeof(char *) * map->height);
 	if (!map->grid)
 		return (0);
 	//ft_memset(map->grid, 0, sizeof(char *) * map->height);
@@ -141,7 +149,10 @@ int	process_line(t_map *map, char *line, int y)
 	if (len > 0 && map->grid[y][len - 1] == '\n' && len--)
 		map->grid[y][len] = '\0';
 	if (len != (size_t)map->width)
-		return (free(map->grid[y]),map->grid[y] = NULL, 0);
+		{
+            return(tracked_free(map->grid[y]), map->grid[y] = NULL, 0);
+            //return (free(map->grid[y]),map->grid[y] = NULL, 0);
+        }
 	x = -1;
 	while (++x < map->width)
 	{
@@ -155,9 +166,15 @@ int	process_line(t_map *map, char *line, int y)
 		else if (map->grid[y][x] == 'C')
 			map->c_count++;
 		else if (!ft_strchr("01", map->grid[y][x]))
-			return (free(map->grid[y]),map->grid[y] = NULL, 0);
-		if (map->p_count > 1 || map->e_count > 1)
-			return (free(map->grid[y]), map->grid[y] = NULL, 0);
+        {
+            return(tracked_free(map->grid[y]), map->grid[y] = NULL, 0);
+			//return (free(map->grid[y]),map->grid[y] = NULL, 0);
+        }
+        if (map->p_count > 1 || map->e_count > 1)
+        {
+            return(tracked_free(map->grid[y]), map->grid[y] = NULL, 0);
+			//return (free(map->grid[y]), map->grid[y] = NULL, 0);
+        }
 	}
 	return (1);
 }
@@ -175,16 +192,21 @@ int     load_map(int fd, t_map *map)
         if(!line || !process_line(map, line, y))
         {
             if (line)
-                 free(line);
+            {
+                tracked_free(line);  
+               //  free(line);
+            }
             return(clean_map(map),0);
         }
-        free(line);
+        tracked_free(line);
+        //free(line);
     }
     // ******** test this part  by rmoving it and add white space the map in separate line leak ...  /\/
     line = get_next_line(fd);
     if(line)
     {
-        free(line);
+        tracked_free(line);
+        //free(line);
         return(clean_map(map),0);
     }
     return (1);
@@ -247,7 +269,8 @@ char **mimc_map(t_map *map)
         char **copy;
         int y;
         
-        copy = (char **)malloc((sizeof(char *) * map->height));
+        copy = tracked_malloc(sizeof(char *) * map->height);
+       // copy = (char **)malloc((sizeof(char *) * map->height));
         if(!copy)
             return NULL;
         y = -1;
@@ -268,8 +291,12 @@ void free_dubel(char **str, int height)
 
     i = -1;
     while(++i < height)
-        free(str[i]);
-    free(str);
+    {
+        tracked_free(str[i]);
+        //free(str[i]);
+    }
+    tracked_free(str);
+    //free(str);
 }
 void    flood_fill(t_map *map, char **grid, int x, int y)
 {
@@ -291,19 +318,15 @@ void    flood_fill(t_map *map, char **grid, int x, int y)
 
 void    flood_fill_1(t_map *map, char **grid, int x, int y)
 {
-    if(y >= map->height || x >= map->width || grid[y][x] == '1' )
+    if(y >= map->height || x >= map->width || grid[y][x] == '1' || grid[y][x] == 'E' )
         return;
-    if(grid[y][x] == 'E' )
-    {
-        grid[y][x] = '1';
-    }
     if(grid[y][x] == 'C')
         map->c_collected++;
     grid[y][x] = '1';
-    flood_fill(map, grid, x + 1, y);
-    flood_fill(map, grid, x - 1, y);
-    flood_fill(map, grid, x, y + 1);
-    flood_fill(map, grid, x, y - 1);
+    flood_fill_1(map, grid, x + 1, y);
+    flood_fill_1(map, grid, x - 1, y);
+    flood_fill_1(map, grid, x, y + 1);
+    flood_fill_1(map, grid, x, y - 1);
 }
 int check_path_to_c(t_map *map)
 {
@@ -316,18 +339,45 @@ int check_path_to_c(t_map *map)
     map->c_collected = 0;
     flood_fill_1(map, test, map->player.x, map->player.y);
     free_dubel(test, map->height);
-    
     return(map->c_collected ==  map->c_count);
+}
+void *tracked_malloc(size_t size) {
+    void *ptr = malloc(size);
+    if (ptr) {
+        printf("Allocated: %p from %s\n", ptr, __func__);
+        t_alloc *node = malloc(sizeof(t_alloc));
+        node->ptr = ptr;
+        node->next = g_alloc_list;
+        g_alloc_list = node;
+        printf("Allocated: %p\n", ptr);
+    }
+    return ptr;
+}
+
+void tracked_free(void *ptr) {
+    if (ptr) {
+        // printf("Freed: %p\n", ptr);
+        t_alloc **node = &g_alloc_list;
+        while (*node) {
+            if ((*node)->ptr == ptr) {
+                t_alloc *temp = *node;
+                *node = temp->next;
+                free(temp);
+            }
+            else 
+                node = &(*node)->next;
+        }
+        free(ptr);
+    }
 }
 int validate_components(t_map *map)
 {
     char **new;
     
-    
+    if(!check_path_to_c(map))
+        return 0;
     new = mimc_map(map);
     if(!new)
-        return 0;
-    if(!check_path_to_c(map))
         return 0;
     map->exit_reachable = 0;
     map->c_collected = 0;
@@ -336,6 +386,7 @@ int validate_components(t_map *map)
     
     return(map->c_collected == map->c_count && map->exit_reachable == 1);
 }
+
 int validate_map(char *filename, t_map *map)
 {
     int fd;
@@ -344,7 +395,7 @@ int validate_map(char *filename, t_map *map)
     if(!check_extention(filename) || fd < 0)
                 return(clean_exit(map, fd, "Error\nWhether the file extention or file name is incorrect \n"), 0);
     if(!get_map_dimensions(fd, map))
-           return(clean_exit(map, fd, "Error\nmap dimensions are incorrect must be at least 3x3 and less than 42x44\n"), 0);
+           return(clean_exit(map, fd, "Error\nmap dimensions are incorrect must be at least 3x3 and less than 24x44\n"), 0);
     close(fd);
     fd = open(filename, O_RDONLY);
     if(fd < 0 || !load_map(fd, map))
@@ -354,6 +405,5 @@ int validate_map(char *filename, t_map *map)
         return(clean_exit(map, -1, "Error\nmap isn't closed with walls\n"), 0);
     if(!validate_components(map))
         return(clean_exit(map, -1, "Error\nExit isn't reachable or Coins aren't collected\n"), 0);
-    return 1;
-  
+    return 1; 
 }

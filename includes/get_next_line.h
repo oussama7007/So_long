@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:44:22 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/03 13:46:18 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/23 10:25:42 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
+#include "so_long.h"
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10

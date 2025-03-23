@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 01:33:07 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/23 00:24:03 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/23 10:04:36 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ void	clean_exit_game(t_game *game, char *msg)
     }
     if (game->mlx)
     {
-        free(game->mlx); // Required for macOS
+       tracked_free(game->mlx);
+       //free(game->mlx); // Required for macOS
         game->mlx = NULL;
     }
     clean_map(&game->map);
@@ -107,7 +108,7 @@ void	init_game(t_game *game) //Initialize mlx -> load texture (mlx_xpm_file_to_i
     if(!game->win)
         clean_exit_game(game, "Error: mlx_new_window() failed.\n");
     
-     //mlx_do_sync(game->mlx); // forces MINILIbx to synchronize all pending operations immediately Why is this important?
+     mlx_do_sync(game->mlx); // forces MINILIbx to synchronize all pending operations immediately Why is this important?
     // Normally, MLX batches rendering operations and executes them just before the next frame.
     // mlx_do_sync() ensures that everything is drawn right away instead of waiting for MLX's internal refresh cycle
    //  Helps prevent flickering or delays in rendering.

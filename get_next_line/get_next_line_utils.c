@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 08:25:20 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/14 21:33:55 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/23 10:33:50 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		s1 = "";
 	if (!s2)
 		s2 = "";
-	res = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	res = tracked_malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	//res = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!res)
 		return (NULL);
 	while (s1[++i] != '\0')

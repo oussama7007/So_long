@@ -5,7 +5,7 @@
 #include "mlx.h"
 #include <stdlib.h>
 #include "get_next_line.h"
-
+#include <stdio.h>
 
 
 # define TILE_SIZE  60
@@ -55,6 +55,19 @@ typedef struct s_game{
     int game_over;
     void *img;
 } t_game;
+//
+
+typedef struct s_alloc {
+    void *ptr;
+    struct s_alloc *next;
+} t_alloc;
+extern t_alloc *g_alloc_list;
+
+//
+void *tracked_malloc(size_t size);
+void tracked_free(void *ptr);
+
+//
 
 // Parsing
 int validate_map(char *filename, t_map *map);
