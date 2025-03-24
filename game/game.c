@@ -6,108 +6,52 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 01:33:07 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/23 16:57:53 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/24 11:26:06 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/so_long.h"
-#include "mlx.h"
-
-void	ft_putstr_fd(char *s, int fd)
-{
-	if (!s)
-		return ;
-	write(fd, s, ft_strlen(s));
-}
-// static int handle_expose(t_game *game) // calls reder_map when the window needs to be redrawn(e.g miinimized/restored)
-// {                                       //: Ensures the game screen is refreshed when necessary.
-//     render_map((void *)game);
-//     return (0);
-//}
-// void	clean_exit_game(t_game *game, char *msg)
-// {
-// 	if (msg)
-// 		ft_putstr_fd(msg, 2);
-//     if (game->textures.wall)
-//         mlx_destroy_image(game->mlx, game->textures.wall);
-//     if (game->textures.player)
-//         mlx_destroy_image(game->mlx, game->textures.player);
-//     if (game->textures.collectible)
-//         mlx_destroy_image(game->mlx, game->textures.collectible);
-//     if (game->textures.exit)
-//         mlx_destroy_image(game->mlx, game->textures.exit);
-//     if (game->textures.floor)
-//         mlx_destroy_image(game->mlx, game->textures.floor);
-// 	if (game->win)
-//     {
-//             mlx_clear_window(game->mlx, game->win);
-// 		    mlx_destroy_window(game->mlx, game->win);
-//     }	
-//     if(game->img)
-//     {   
-//         mlx_destroy_image(game->mlx, game->img);
-//         if(game->mlx)
-//             free(game->mlx);
-//         game->mlx = NULL;
-//     }
-//     // if (game->mlx)
-//     // {
-//     //    free(game->mlx); // Required for macOS
-//     //     game->mlx = NULL;
-//     // }
-//     clean_map(&game->map);
-// 	exit(0);
-// }
+#include "so_long.h"
 
 void    clean_exit_game(t_game *game, char *msg)
 {
     if (!game)
-          exit(1);
+         exit(1);
     if (msg)
         ft_putstr_fd(msg, 2);
-   
     if (game->textures.wall)
-        mlx_destroy_image(game->mlx, game->textures.wall);
+    mlx_destroy_image(game->mlx, game->textures.wall);
+
     if (game->textures.player)
         mlx_destroy_image(game->mlx, game->textures.player);
+
     if (game->textures.collectible)
         mlx_destroy_image(game->mlx, game->textures.collectible);
+
     if (game->textures.exit)
         mlx_destroy_image(game->mlx, game->textures.exit);
+
     if (game->textures.floor)
         mlx_destroy_image(game->mlx, game->textures.floor);
+    
     if (game->win)
     {
             mlx_clear_window(game->mlx, game->win);
             mlx_destroy_window(game->mlx, game->win);
     }
-    if(game->img)
-    {   
-        mlx_destroy_image(game->mlx, game->img);
-        // if(game->mlx)
-        // {
-        //     free(game->mlx);
-        //     game->mlx = NULL;
-        // }
 
-    }
-    // if (game->mlx)
-    // {
-    //    free(game->mlx); // Required for macOS
-    //     game->mlx = NULL;
-    // }
-    if (game->map.grid)
-        clean_map(&game->map);
+    if(game->img)
+        mlx_destroy_image(game->mlx, game->img);
+  
+
+
     exit(0);
 }
-static int handle_close(int event, void *param) // calls clean_exit_game whene the X botton is clicked
-{                                                     
+static int handle_close(void *param)
+{
     t_game *game = (t_game *)param;
-    (void)event;
     clean_exit_game(game, NULL);
     return (0);
 }
-
 
 void	init_game(t_game *game) //Initialize mlx -> load texture (mlx_xpm_file_to_image()) -> create game window mlx_new_window() -> sync and render the map
 {                                   
@@ -127,7 +71,7 @@ void	init_game(t_game *game) //Initialize mlx -> load texture (mlx_xpm_file_to_i
     if (!game->textures.collectible)
         clean_exit_game(game, "Error: Failed to load collectible texture.\n");
 	game->textures.exit = mlx_xpm_file_to_image(game->mlx,
-			"textures/exit.xpm", &(int){66}, &(int){66});
+			"textures/exit.xpm", &(int){64}, &(int){64});
     if(!game->textures.exit)
         clean_exit_game(game, "Error: Failed to load exit texture.\n");
 	game->textures.floor = mlx_xpm_file_to_image(game->mlx,
@@ -137,7 +81,7 @@ void	init_game(t_game *game) //Initialize mlx -> load texture (mlx_xpm_file_to_i
 	game->win = mlx_new_window(game->mlx,game->map.width * TILE_SIZE,game->map.height * TILE_SIZE, "first game");
     if(!game->win)
         clean_exit_game(game, "Error: mlx_new_window() failed.\n");
-    mlx_do_sync(game->mlx); // forces MINILIbx to synchronize all pending operations immediately Why is this important?
+    // forces MINILIbx to synchronize all pending operations immediately Why is this important?
     // Normally, MLX batches rendering operations and executes them just before the next frame.
     // mlx_do_sync() ensures that everything is drawn right away instead of waiting for MLX's internal refresh cycle
    //  Helps prevent flickering or delays in rendering.
@@ -152,7 +96,7 @@ void	init_game(t_game *game) //Initialize mlx -> load texture (mlx_xpm_file_to_i
     //mlx_loop_hook(game->mlx, render_map, game); // Calls render_map(game) on every frame refresh. /*Ensures that the game screen updates continuously.
     // Useful for animations or real-time updates.
     // If omitted, the screen only updates when an event occurs (e.g., keypress). 
-    
+   
     mlx_hook(game->win, 17, 0, handle_close , game); // 12 = Expose event on macOS
     mlx_hook(game->win, 2, 1L<<0, handle_keypress, game); // Registers a keypress event (2) → Calls handle_keypress() whenever a key is pressed. // Player presses a key (W, A, S, D, etc.).
     // handle_keypress(keycode, game) gets called.
@@ -174,7 +118,7 @@ void	init_game(t_game *game) //Initialize mlx -> load texture (mlx_xpm_file_to_i
 int render_map(void *game_ptr)
 {
 
-    t_game  *game = (t_game *)game_ptr; // Add this line
+   t_game  *game = (t_game *)game_ptr; // Add this line
     int x;
     int y;
 
@@ -186,14 +130,9 @@ int render_map(void *game_ptr)
         {
             mlx_put_image_to_window(game->mlx, game->win, game->textures.floor, x * TILE_SIZE, y * TILE_SIZE);
             if (game->map.grid[y][x] == '1')
-                mlx_put_image_to_window(game->mlx, game->win, game->textures.wall, x * TILE_SIZE, y * TILE_SIZE);
-                
+                mlx_put_image_to_window(game->mlx, game->win, game->textures.wall, x * TILE_SIZE, y * TILE_SIZE);       
             if (game->map.grid[y][x] == 'C')
-            {
-                //int offest_x = (TILE_SIZE - game->textures.coin_width) / 2;
-                //int offest_y = (TILE_SIZE - game->textures.coin_height) / 2;
                 mlx_put_image_to_window(game->mlx, game->win, game->textures.collectible, x * TILE_SIZE   , y * TILE_SIZE  );
-            }
             if (game->map.grid[y][x] == 'P')
                 mlx_put_image_to_window(game->mlx, game->win, game->textures.player, x * TILE_SIZE, y * TILE_SIZE);
             if (game->map.grid[y][x] == 'E')
@@ -205,24 +144,12 @@ int render_map(void *game_ptr)
     return (0);
 }
 
-void    ft_putnbr(int nb)
-{
-    int a;
-
-    if(nb > 10)
-        ft_putnbr(nb / 10);
-    a = nb % 10 + '0';
-    write(1, &a, 1);
-}
-
 
 int        handle_keypress(int keycode, t_game *game)
 {
     static int moves = 0;
     int new_x = game->map.player.x;
     int new_y = game->map.player.y;
-    //int old_x = game->map.player.x; // Save current position
-   // int old_y = game->map.player.y;
     if(keycode == KEY_W || keycode == KEY_UP)
         new_y--;
     else if(keycode == KEY_S || keycode == KEY_DOWN)

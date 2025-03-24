@@ -6,13 +6,12 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 12:17:40 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/23 15:38:04 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/24 01:43:40 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
-#include <fcntl.h>
+
 char	*next_line(char *buffer)
 {
 	int		i;
@@ -27,9 +26,7 @@ char	*next_line(char *buffer)
 		return (free(buffer), buffer = NULL, NULL);
 	new_line = malloc(ft_strlen(buffer) - i + 1);
 	if (!new_line)
-	{
 		return (free(buffer), buffer = NULL, NULL);
-	}
 	i++;
 	while (buffer[i])
 		new_line[j++] = buffer[i++];
@@ -79,9 +76,7 @@ char	*read_file(int fd, char *static_buffer)
 	{
 		bytes = read(fd, buffer, BUFFER_SIZE);
 		if (bytes < 0)
-		{
 			return (free(buffer), free(static_buffer), NULL);
-		}
 		buffer[bytes] = '\0';
 		temp = static_buffer;
 		static_buffer = ft_strjoin(static_buffer, buffer);

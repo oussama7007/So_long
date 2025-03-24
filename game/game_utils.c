@@ -1,36 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   game_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/28 08:53:58 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/24 11:20:14 by oait-si-         ###   ########.fr       */
+/*   Created: 2025/03/24 02:12:56 by oait-si-          #+#    #+#             */
+/*   Updated: 2025/03/24 10:49:43 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-// void t()
-// {
-//     system("leaks so_long");
-// }
-
-int	main(int ac, char **av)
+void	ft_putnbr(int nb)
 {
-	// atexit(t);
-	t_game	game;
+	int	a;
 
-	ft_memset(&game, 0, sizeof(t_game));
-	if (ac != 2)
-	{
-		ft_putstr_fd("Error: Enter only one map.ber\n", 2);
-		return (1);
-	}
-	if (!validate_map(av[1], &game.map))
-		return (0);
-	ft_putstr_fd("Map is valid. Starting game...\n", 1);
-	init_game(&game);
-	return (0);
+	if (nb >= 10)
+		ft_putnbr(nb / 10);
+	a = nb % 10 + '0';
+	write(1, &a, 1);
 }
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	if (!s)
+		return ;
+	write(fd, s, ft_strlen(s));
+}
+

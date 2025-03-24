@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 08:25:20 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/23 15:35:55 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/24 01:45:07 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,21 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (res);
 }
 
-char	*ft_strchr(const char *string, int searchedChar)
+char	*ft_strchr(const char *string, int searched_char)
 {
-	while (*string != (char)searchedChar && *string != '\0')
+	while (*string != (char)searched_char && *string != '\0')
 		string++;
-	if (*string == (char)searchedChar)
+	if (*string == (char)searched_char)
 		return ((char *)string);
 	return (NULL);
 }
 
-size_t	ft_strlen(const char *theString)
+size_t	ft_strlen(const char *the_string)
 {
 	size_t	i;
 
 	i = 0;
-	while (theString[i])
+	while (the_string[i])
 		i++;
 	return (i);
 }
