@@ -6,25 +6,73 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 02:12:56 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/24 15:50:58 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/24 16:26:47 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	ft_putnbr(int nb)
+void	free_textures(t_game *game)
 {
-	int	a;
-
-	if (nb >= 10)
-		ft_putnbr(nb / 10);
-	a = nb % 10 + '0';
-	write(1, &a, 1);
+	if (game->s_textures.wall)
+		mlx_destroy_image(game->mlx, game->s_textures.wall);
+	if (game->s_textures.player)
+		mlx_destroy_image(game->mlx, game->s_textures.player);
+	if (game->s_textures.collectible)
+		mlx_destroy_image(game->mlx, game->s_textures.collectible);
+	if (game->s_textures.exit)
+		mlx_destroy_image(game->mlx, game->s_textures.exit);
+	if (game->s_textures.floor)
+		mlx_destroy_image(game->mlx, game->s_textures.floor);
 }
 
-void	ft_putstr_fd(char *s, int fd)
+int	handle_close(void *param)
 {
-	if (!s)
-		return ;
-	write(fd, s, ft_strlen(s));
+	t_game	*game;
+
+	game = (t_game *)param;
+	clean_exit_game(game, NULL);
+	return (0);
+}
+
+void	clean_exit_game(t_game *game, char *msg)
+{
+	if (!game)
+		exit(1);
+	if (msg)
+		ft_putstr_fd(msg, 2);
+	free_textures(game);
+	if (game->win)
+	{
+		mlx_clear_window(game->mlx, game->win);
+		mlx_destroy_window(game->mlx, game->win);
+	}
+	if (game->img)
+		mlx_destroy_image(game->mlx, game->img);
+	exit(0);
+}
+
+void	load_textures(t_game *game)
+{
+	game->s_textures.wall = mlx_xpm_file_to_image(game->mlx,
+			"textures/wall.xpm", &(int){64}, &(int){64});
+	if (!game->s_textures.wall)
+		clean_exit_game(game, "Error: Failed to load wall texture.\n");
+	game->s_textures.player = mlx_xpm_file_to_image(game->mlx,
+			"textures/player.xpm", &(int){64}, &(int){64});
+	if (!game->s_textures.player)
+		clean_exit_game(game, "Error: Failed to load player texture.\n");
+	game->s_textures.collectible = mlx_xpm_file_to_image(game->mlx,
+			"textures/coin.xpm", &game->s_textures.coin_width,
+			&game->s_textures.coin_height);
+	if (!game->s_textures.collectible)
+		clean_exit_game(game, "Error: Failed to load collectible texture.\n");
+	game->s_textures.exit = mlx_xpm_file_to_image(game->mlx,
+			"textures/exit.xpm", &(int){64}, &(int){64});
+	if (!game->s_textures.exit)
+		clean_exit_game(game, "Error: Failed to load exit texture.\n");
+	game->s_textures.floor = mlx_xpm_file_to_image(game->mlx,
+			"textures/floor.xpm", &(int){64}, &(int){64});
+	if (!game->s_textures.floor)
+		clean_exit_game(game, "Error: Failed to load floor texture.\n");
 }

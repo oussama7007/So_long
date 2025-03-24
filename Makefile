@@ -1,4 +1,3 @@
-# Root Makefile
 
 NAME = so_long
 LIBS = -lmlx -framework OpenGL -framework AppKit
@@ -15,6 +14,7 @@ SRCS = src/main.c src/parse.c \
 		src/process_line.c \
 		game/game.c \
 		game/game_utils.c \
+		game/game_utils1.c \
 		get_next_line/get_next_line.c \
 	    get_next_line/get_next_line_utils.c 
 
@@ -39,4 +39,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: clean 

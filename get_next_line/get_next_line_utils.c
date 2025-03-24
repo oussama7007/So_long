@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 08:25:20 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/24 01:45:07 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/24 16:34:08 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,21 @@ size_t	ft_strlen(const char *the_string)
 	while (the_string[i])
 		i++;
 	return (i);
+}
+
+void	ft_putnbr(int nb)
+{
+	int	a;
+
+	if (nb >= 10)
+		ft_putnbr(nb / 10);
+	a = nb % 10 + '0';
+	write(1, &a, 1);
+}
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	if (!s)
+		return ;
+	write(fd, s, ft_strlen(s));
 }

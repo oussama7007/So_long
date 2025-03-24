@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 15:44:22 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/24 01:48:41 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/24 16:20:14 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ char	*read___file(int fd, char *static_buffer);
 char	*new__line(char *buffer);
 char	*next__line(char *buffer);
 size_t	ft_strlen(const char *theString);
-
+void	ft_putnbr(int nb);
+void	ft_putstr_fd(char *s, int fd);
 #endif

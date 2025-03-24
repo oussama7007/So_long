@@ -6,20 +6,14 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 08:53:58 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/24 11:20:14 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/24 15:50:21 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-// void t()
-// {
-//     system("leaks so_long");
-// }
-
 int	main(int ac, char **av)
 {
-	// atexit(t);
 	t_game	game;
 
 	ft_memset(&game, 0, sizeof(t_game));

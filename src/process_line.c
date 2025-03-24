@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:12:09 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/24 11:12:27 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/24 15:24:15 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ int	process_line(t_map *map, char *line, int y)
 	size_t	len;
 	int		x;
 
-	if (!line || !(map->grid[y] = ft_strdup(line)))
+	map->grid[y] = ft_strdup(line);
+	if (!line || !map->grid[y])
 		return (0);
 	len = ft_strlen(map->grid[y]);
 	if (len > 0 && map->grid[y][len - 1] == '\n' && len--)

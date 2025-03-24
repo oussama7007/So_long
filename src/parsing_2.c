@@ -6,13 +6,13 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 02:08:01 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/24 11:37:34 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/24 13:14:48 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	check_extention(char *filename)
+int	check_extension(char *filename)
 {
 	int		i;
 	int		j;
