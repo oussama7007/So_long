@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 02:02:42 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/24 10:50:33 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/25 11:51:21 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	clean_map(t_map *map)
 		free(map->grid);
 		map->grid = NULL;
 	}
-	exit(0);
 }
 
 void	clean_exit(t_map *map, int fd, char *str)

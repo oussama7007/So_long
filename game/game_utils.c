@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 02:12:56 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/24 16:26:47 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/25 11:51:31 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ int	handle_close(void *param)
 
 void	clean_exit_game(t_game *game, char *msg)
 {
-	if (!game)
-		exit(1);
 	if (msg)
 		ft_putstr_fd(msg, 2);
+	if (!game)
+		exit(1);
 	free_textures(game);
 	if (game->win)
 	{
