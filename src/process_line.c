@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:12:09 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/24 15:24:15 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/26 09:45:45 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,7 @@
 int	handle_invalid_char(char *line, int y, t_map *map)
 {
 	if (!ft_strchr("01PEC", line[y]))
-	{
-		free(map->grid[y]);
-		map->grid[y] = NULL;
 		return (0);
-	}
 	return (1);
 }
 
