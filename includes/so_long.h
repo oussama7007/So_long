@@ -97,7 +97,7 @@ void	render_cell(t_game *game, int x, int y);
 void	put_image(t_game *game, void *img, int x, int y);
 
 /* Process line */
-int		handle_invalid_char(char *line, int y, t_map *map);
+int		handle_invalid_char(char *line, int y);
 int		handle_player_and_exit(t_map *map, int x, int y);
 int		handle_coin_and_invalid_count(t_map *map, int x, int y);
 int		process_line(t_map *map, char *line, int y);

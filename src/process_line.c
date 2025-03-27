@@ -6,13 +6,13 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:12:09 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/26 09:45:45 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/27 10:06:37 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	handle_invalid_char(char *line, int y, t_map *map)
+int	handle_invalid_char(char *line, int y)
 {
 	if (!ft_strchr("01PEC", line[y]))
 		return (0);
@@ -60,7 +60,7 @@ int	process_line(t_map *map, char *line, int y)
 	x = -1;
 	while (++x < map->width)
 	{
-		if (!handle_invalid_char(map->grid[y], x, map))
+		if (!handle_invalid_char(map->grid[y], x))
 			return (0);
 		if (!handle_player_and_exit(map, x, y))
 			return (0);
