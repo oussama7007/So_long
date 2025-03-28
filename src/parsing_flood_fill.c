@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 02:05:54 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/24 10:51:05 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/28 11:38:39 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,6 @@ int	validate_components(t_map *map)
 	map->c_collected = 0;
 	flood_fill(map, new, map->player.x, map->player.y);
 	free_dubel(new, map->height);
-	return (map->c_collected == map->c_count && map->exit_reachable == 1);
+	return (map->c_collected == map->c_count && map->exit_reachable == 1
+		&& map->c_collected > 0);
 }
