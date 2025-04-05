@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 02:12:56 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/25 11:51:31 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/04/05 21:35:13 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,13 @@ void	clean_exit_game(t_game *game, char *msg)
 	if (game->img)
 		mlx_destroy_image(game->mlx, game->img);
 	exit(0);
+}
+
+int	is_valid_key_press(int keycode)
+{
+	return (keycode == KEY_W || keycode == KEY_LEFT || keycode == KEY_UP
+		|| keycode == KEY_DOWN || keycode == KEY_S || keycode == KEY_A
+		|| keycode == KEY_D || keycode == KEY_RIGHT);
 }
 
 void	load_textures(t_game *game)

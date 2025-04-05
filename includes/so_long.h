@@ -95,6 +95,7 @@ int		handle_close(void *param);
 void	free_textures(t_game *game);
 void	render_cell(t_game *game, int x, int y);
 void	put_image(t_game *game, void *img, int x, int y);
+int		is_valid_key_press(int keycode);
 
 /* Process line */
 int		handle_invalid_char(char *line, int y);

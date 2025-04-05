@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   game_utils1.c                                      :+:      :+:    :+:   */
+/*   game_utils1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 16:03:53 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/03/24 16:13:26 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/03/29 21:30:22 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int	handle_keypress(int keycode, t_game *game)
 	new_y = game->map.player.y;
 	if (keycode == KEY_ESC)
 		clean_exit_game(game, NULL);
+	if (!is_valid_key_press(keycode))
+		return (0);
 	get_new_position(keycode, &new_x, &new_y);
 	if (!is_valid_move(game, new_x, new_y))
 		return (0);
